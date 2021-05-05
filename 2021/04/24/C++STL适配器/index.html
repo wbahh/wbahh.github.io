@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"wbahh.com","root":"/","images":"/images","scheme":"Gemini","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":true,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
+  </script>
+<meta name="description" content="C++ STL适配器相关">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++STL适配器">
+<meta property="og:url" content="http://wbahh.com/2021/04/24/C++STL%E9%80%82%E9%85%8D%E5%99%A8/index.html">
+<meta property="og:site_name" content="wbahh">
+<meta property="og:description" content="C++ STL适配器相关">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-24T14:59:05.000Z">
+<meta property="article:modified_time" content="2021-04-26T04:43:31.000Z">
+<meta property="article:author" content="wbahh">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="STL">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://wbahh.com/2021/04/24/C++STL%E9%80%82%E9%85%8D%E5%99%A8/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+<title>C++STL适配器 | wbahh</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">wbahh</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">个人博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">22</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">15</span></a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="wbahh"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">wbahh</p>
+  <div class="site-description" itemprop="description">欢喜也只得中庸</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button site-overview-item animated"><i class="fa fa-comment"></i>
+    Chat
+  </a>
+  </div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wbahh" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wbahh" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wangyutong551@yeah.net" title="E-Mail → mailto:wangyutong551@yeah.net" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://wbahh.com/2021/04/24/C++STL%E9%80%82%E9%85%8D%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="wbahh">
+      <meta itemprop="description" content="欢喜也只得中庸">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wbahh">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++STL适配器
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-04-24 22:59:05" itemprop="dateCreated datePublished" datetime="2021-04-24T22:59:05+08:00">2021-04-24</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-04-26 12:43:31" itemprop="dateModified" datetime="2021-04-26T12:43:31+08:00">2021-04-26</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/C/STL/" itemprop="url" rel="index"><span itemprop="name">STL</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>C++ STL适配器相关</p>
+<span id="more"></span>
+
+<p><strong>STL中适配器有三种</strong></p>
+<p>##1.容器适配器</p>
+<p>C++中的容器适配器是干什么的呢？可以做一个比喻，我们已有的容器（比如vector、list、deque）就是设备，这个设备支持的操作很多，比如插入，删除，迭代器访问等等。而我们希望这个容器表现出来的是栈的样子：先进后出，入栈出栈等等，此时，我们没有必要重新动手写一个新的数据结构，而是把原来的容器重新封装一下，改变它的接口，就能把它当做栈使用了。<br>言归正传，理解了什么是适配器以后，其实问题就很简单的。C++中定义了3种容器适配器，它们让容器提供的接口变成了我们常用的的3种数据结构：<code>stack</code>（先进后出）<code>queue</code>（先进先出）和<code>priority_queue</code>（按照优先级（“&lt;”号）排序，而不是按照到来的顺序排序）。<br>默认情况下，栈和队列都是基于deque实现的，而优先级队列则是基于vector实现的。我们也可以指定自己的实现方式。但是由于数据结构的关系，我们也不能胡乱指定。栈的特点是后进先出，所以它关联的基本容器可以是任意一种顺序容器，因为这些容器类型结构都可以提供栈的操作有求，它们都提供了push_back、pop_back和back操作。 队列queue的特点是先进先出，适配器要求其关联的基础容器必须提供pop_front操作，因此其不能建立在vector容器上；对于优先级队列，由于它要求支持随机访问的功能，所以可以建立在vector或者deque上，不能建立在list上。</p>
+<p>三种关联容器提供的接口：</p>
+<p>1.stack</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">template&lt;class T,class Container &#x3D; std::deque&lt;T&gt;&gt; class stack;
+empty()  堆栈为空则返回真
+pop()  移除栈顶元素
+push()  在栈顶增加元素
+size()  返回栈中元素数目
+top()  返回栈顶元素 
+swap() 交换两个位置的元素
+operator&#x3D; 赋值运算符的重载</code></pre>
+
+<p>2.queue</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">template&lt;class T, class Container &#x3D; std::deque&lt;T&gt;&gt; class queue;
+back()  返回一个引用，指向最后一个元素
+empty()  如果队列空则返回真
+front()  返回第一个元素
+pop()  删除第一个元素
+push()  在末尾加入一个元素
+size()  返回队列中元素的个数 </code></pre>
+
+<p>3.priority_queue</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">template&lt;class T, class Container &#x3D; std::vector&lt;T&gt;,
+    		class Compare &#x3D; std::less&lt;typename Container::value_type&gt;
+			&gt; class priority_queue;
+empty()  如果优先队列为空，则返回真
+pop()  删除第一个元素
+push()  加入一个元素
+size()  返回优先队列中拥有的元素的个数
+top()  返回优先队列中有最高优先级的元素</code></pre>
+
+<p>一个例子</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">int main() &#123;
+	const stack&lt;int&gt;::size_type stk_size &#x3D; 10;
+	&#x2F;&#x2F;创建一个空栈
+	stack&lt;int&gt; intStack;
+	&#x2F;&#x2F;改变栈的实现方式为vector
+	&#x2F;&#x2F;stack&lt;int,vector&lt;int&gt; &gt; intStack;
+	int ix &#x3D; 0;
+ 
+	while(intStack.size() !&#x3D; stk_size)
+		intStack.push(ix++);
+ 
+	int error_cnt &#x3D; 0;
+	while(intStack.empty() &#x3D;&#x3D; false) &#123;
+		&#x2F;&#x2F;top操作返回栈顶元素，但并不删除
+		int value &#x3D; intStack.top();
+		if(value !&#x3D; --ix) &#123;
+			cout&lt;&lt;&quot;opps! expected &quot;&lt;&lt;ix&lt;&lt;&quot; received &quot;&lt;&lt;value&lt;&lt;endl;
+			++error_cnt;
+		&#125;
+		&#x2F;&#x2F;删除栈顶元素
+		intStack.pop();
+	&#125;
+ 
+	cout&lt;&lt;&quot;our program ran with &quot;&lt;&lt;error_cnt&lt;&lt;&quot; errors! &quot;&lt;&lt;endl;
+	return 0;
+&#125;</code></pre>
+
+<p>简单实现stack</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">template&lt;class _Ty, class _Container &#x3D; deque&lt;_Ty&gt;&gt; 
+class stack &#123;	&#x2F;&#x2F; LIFO queue implemented with a container
+public:
+	typedef stack&lt;_Ty, _Container&gt; _Myt;
+	typedef _Container container_type;
+	typedef typename _Container::value_type value_type;
+	typedef typename _Container::size_type size_type;
+	typedef typename _Container::reference reference;
+	typedef typename _Container::const_reference const_reference;
+ 
+	stack():c()&#123;&#125;	&#x2F;&#x2F; construct with empty container
+ 
+	stack(const _Myt&amp; _Right)
+		:c(_Right.c)
+        &#123;&#125;	&#x2F;&#x2F; construct by copying _Right
+ 
+	explicit stack(const _Container&amp; _Cont)
+		:c(_Cont)
+        &#123;&#125;	&#x2F;&#x2F; construct by copying specified container
+ 
+	_Myt&amp; operator&#x3D;(const _Myt&amp; _Right) &#123;	&#x2F;&#x2F; assign by copying _Right
+		c &#x3D; _Right.c;
+		return (*this);
+	&#125;
+ 
+	stack(_Myt&amp;&amp; _Right)
+		:c(_STD move(_Right.c))
+        &#123;&#125;	&#x2F;&#x2F; construct by moving _Right
+		
+ 
+	explicit stack(_Container&amp;&amp; _Cont)
+		:c(_STD move(_Cont))
+        &#123;&#125;	&#x2F;&#x2F; construct by copying specified container
+		
+ 
+	_Myt&amp; operator&#x3D;(_Myt&amp;&amp; _Right) &#123;	&#x2F;&#x2F; assign by moving _Right
+		c &#x3D; _STD move(_Right.c);
+		return (*this);
+	&#125;
+ 
+	void push(value_type&amp;&amp; _Val) &#123;	&#x2F;&#x2F; insert element at beginning
+		c.push_back(_STD move(_Val));
+	&#125;
+ 
+	template&lt;class _Valty&gt;
+	void emplace(_Valty&amp;&amp; _Val) &#123;	&#x2F;&#x2F; insert element at beginning
+		c.emplace_back(_STD forward&lt;_Valty&gt;(_Val));
+	&#125;
+ 
+	void swap(_Myt&amp;&amp; _Right) &#123;	&#x2F;&#x2F; exchange contents with movable _Right
+		c.swap(_STD move(_Right.c));
+	&#125;
+ 
+	bool empty() const &#123;	&#x2F;&#x2F; test if stack is empty
+		return (c.empty());
+	&#125;
+ 
+	size_type size() const &#123;	&#x2F;&#x2F; test length of stack
+		return (c.size());
+	&#125;
+ 
+	reference top() &#123;	&#x2F;&#x2F; return last element of mutable stack
+		return (c.back());
+	&#125;
+ 
+	const_reference top() const &#123;	&#x2F;&#x2F; return last element of nonmutable stack
+		return (c.back());
+	&#125;
+ 
+	void push(const value_type&amp; _Val) &#123;	&#x2F;&#x2F; insert element at end
+		c.push_back(_Val);
+	&#125;
+ 
+	void pop() &#123;	&#x2F;&#x2F; erase last element
+		c.pop_back();
+	&#125;
+ 
+	const _Container&amp; _Get_container() const &#123;	&#x2F;&#x2F; get reference to container
+		return (c);
+	&#125;
+ 
+	void swap(_Myt&amp; _Right) &#123;	&#x2F;&#x2F; exchange contents with _Right
+		c.swap(_Right.c);
+	&#125;
+ 
+protected:
+	_Container c;	&#x2F;&#x2F; the underlying container
+&#125;;</code></pre>
+
+
+
+<p>##2.迭代器适配器</p>
+<p>为什么要有迭代器：<code>使用一种方法把不同集合类的访问逻辑抽象出来，使得在不暴露集合内部结构为同时达到循环遍历集合的效果，这时就抽象出了迭代器。</code></p>
+<p>为什么要有那么多不同的迭代器：<code>简单的来说就是物尽其用，使得具体的操作使用具类型的迭代器，避免迭代器功能过大或过小。</code></p>
+<p>关于流迭代器：流迭代器时特殊的迭代器，可以将输入/输出流作为容器看待(因为输入输出流都有缓冲区的概念)</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">template&lt; class T, class CharT &#x3D; char, class Traits &#x3D; std::char_traits&lt;CharT&gt;,
+ class Distance &#x3D; std::ptrdiff_t&gt; class istream_iterator
+:public std::iterator&lt;std::input_iterator_tag, T, Distance, const T*, const T&amp;&gt;
+
+template&lt; class T, class CharT &#x3D; char, class Traits &#x3D; std::char_traits&lt;CharT&gt;,
+ class Distance &#x3D; std::ptrdiff_t &gt; class istream_iterator;
+
+template&lt; class T, class CharT &#x3D; char, class Traits &#x3D; std::char_traits&lt;CharT&gt;
+&gt; class ostream_iterator
+:public std::iterator&lt;std::output_iterator_tag, void, void, void, void&gt;
+
+template&lt; class T, class CharT &#x3D; char, class Traits &#x3D; std::char_traits&lt;CharT&gt;
+&gt; class ostream_iterator;</code></pre>
+
+<p>例子<code>流迭代器</code>相关</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">void test() &#123;
+	vector&lt;int&gt; numbers&#123;1, 2, 3, 4, 5&#125;;
+	ostream_iterator&lt;int&gt; osi(cout, &quot;\n&quot;);
+	copy(numbers.begin(), numbers.end(), osi);
+&#125;
+
+void test() &#123;
+	vector&lt;int&gt; numbers;
+	cout &lt;&lt; &quot;111&quot; &lt;&lt; endl;
+	istream_iterator&lt;int&gt; isi(cin);
+	cout &lt;&lt; &quot;222&quot; &lt;&lt; endl;
+	&#x2F;* copy(isi, istream_iterator&lt;int&gt;(), numbers.begin());&#x2F;&#x2F;对于vector插入元素应该调用push_back *&#x2F;
+	copy(isi, istream_iterator&lt;int&gt;(), std::back_inserter(numbers));&#x2F;&#x2F;迭代器适配器
+	cout &lt;&lt; &quot;333&quot; &lt;&lt; endl;
+	copy(numbers.begin(), numbers.end(), ostream_iterator&lt;int&gt;(cout, &quot;\n&quot;));
+&#125;</code></pre>
+
+<p>所谓<strong>迭代器适配器</strong>，其本质也是一个模板类，比较特殊的是，该模板类是借助5种基础迭代器实现的。换句话说，迭代器适配器模板类的内部实现，是通过对5种基础迭代器拥有的成员方法进行整合、修改，甚至为了实现某些功能还会添加一些新的成员方法。由此，将基础迭代器“改头换面”，就变成了本节要讲的迭代器适配器。</p>
+<p><code>本质上讲，迭代器适配器仍属于迭代器，可以理解为是基础迭代器的“翻新版”或者“升级版”。同时，“xxx 迭代器适配器”通常直接称为“xxx 迭代器”。</code></p>
+<p>C++ 11 标准中，迭代器适配器供有 4 类</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>反向迭代器（reverse_iterator）</td>
+<td>又称“逆向迭代器”，其内部重新定义了递增运算符（++）和递减运算符（–），专门用来实现对容器的逆序遍历。</td>
+</tr>
+<tr>
+<td>安插型迭代器（inserter或者insert_iterator）</td>
+<td>通常用于在容器的任何位置添加新的元素，需要注意的是，此类迭代器不能被运用到元素个数固定的容器（比如 array）上。</td>
+</tr>
+<tr>
+<td>流迭代器（istream_iterator / ostream_iterator）  流缓冲区迭代器（istreambuf_iterator / ostreambuf_iterator）</td>
+<td>输入流迭代器用于从文件或者键盘读取数据；相反，输出流迭代器用于将数据输出到文件或者屏幕上。  输入流缓冲区迭代器用于从输入缓冲区中逐个读取数据；输出流缓冲区迭代器用于将数据逐个写入输出流缓冲区。</td>
+</tr>
+<tr>
+<td>移动迭代器（move_iterator）</td>
+<td>此类型迭代器是 C++ 11 标准中新添加的，可以将某个范围的类对象移动到目标范围，而不需要通过拷贝去移动。</td>
+</tr>
+</tbody></table>
+<p>例子<code>反向迭代器</code>相关</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;list&gt;
+using namespace std;
+int main() &#123;
+	std::list&lt;int&gt; values&#123; 1,2,3,4,5 &#125;;
+    &#x2F;&#x2F;找到遍历的起点和终点。
+    std::reverse_iterator&lt;std::list&lt;int&gt;::iterator&gt; begin &#x3D; values.rbegin();
+    std::reverse_iterator&lt;std::list&lt;int&gt;::iterator&gt; end &#x3D; values.rend();
+    while (begin !&#x3D; end) &#123;
+    	cout &lt;&lt; *begin &lt;&lt; &quot; &quot;;
+        &#x2F;&#x2F;注意，这里是 ++，因为反向迭代器内部互换了 ++ 和 -- 的含义。
+        ++begin;
+    &#125;
+    return 0;
+&#125;</code></pre>
+
+
+
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">back_insert_iterator &#x2F;&#x2F;back_insert_iterator是类模板，底层调用了push_back函数
+
+back_inserter &#x2F;&#x2F;back_inserter函数模板，返回类型是back_insert_iterator
+
+front_insert_iterator &#x2F;&#x2F;front_insert_iterator是类模板，底层调用了push_front函数
+
+front_inserter &#x2F;&#x2F;front_inserter函数模板，返回类型是front_insert_iterator
+
+insert_iterator &#x2F;&#x2F;insert_iterator是类模板，底层调用了insert函数
+    
+inserter &#x2F;&#x2F;inserter函数模板，返回类型是insert_iterator</code></pre>
+
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">template&lt; class Container &gt;
+std::back_insert_iterator&lt;Container&gt; back_inserter(Container&amp; c );
+
+template&lt; class Container &gt;
+std::front_insert_iterator&lt;Container&gt; front_inserter(Container&amp; c );
+
+template&lt; class Container &gt;
+std::insert_iterator&lt;Container&gt; inserter(Container&amp; c, typename Container::iterator i );</code></pre>
+
+<p>例子<code>迭代器适配器</code>相关</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">void test() &#123;
+	vector&lt;int&gt; numbers1&#123;1, 3, 5&#125;;
+	list&lt;int&gt; numbers2&#123;20, 30, 40&#125;;
+	&#x2F;&#x2F;back_insert_iterator底层是调用了push_back
+	copy(numbers2.begin(), numbers2.end(), back_insert_iterator&lt;vector&lt;int&gt;&gt;(numbers1));
+	copy(numbers1.begin(), numbers1.end(), ostream_iterator&lt;int&gt;(cout, &quot; &quot;));
+	cout &lt;&lt; endl;
+	&#x2F;&#x2F;front_insert_iterator底层是调用了push_front
+	copy(numbers1.begin(), numbers1.end(), front_insert_iterator&lt;list&lt;int&gt;&gt; (numbers2));
+	copy(numbers2.begin(), numbers2.end(), ostream_iterator&lt;int&gt;(cout, &quot; &quot;));
+	cout &lt;&lt; endl;
+	set&lt;int&gt; numbers3&#123;12, 13, 16, 13&#125;;
+	auto sit &#x3D; numbers3.begin();
+	++sit;
+	&#x2F;&#x2F;insert_iterator底层是调用了insert
+	copy(numbers1.begin(), numbers1.end(), insert_iterator&lt;set&lt;int&gt;&gt; (numbers3, sit));
+	copy(numbers3.begin(), numbers3.end(), ostream_iterator&lt;int&gt;(cout, &quot; &quot;));
+	cout &lt;&lt; endl;
+&#125;</code></pre>
+
+<p>##3.函数适配器</p>
+<p><em>普通函数适配器</em></p>
+<p>作用：<code>通过将一个操作数绑定到给定值而将二元函数对象转换为一元函数对象</code></p>
+<p>函数适配器分为两类：绑定器 与 求反器；</p>
+<p>1.绑定器</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">bind1st &#x2F;&#x2F;cpp17后已删除 &#x2F;&#x2F;将给定值绑定到二元函数对象的第一个实参；返回值是一元函数对象；
+bind2nd &#x2F;&#x2F;cpp17后已删除 &#x2F;&#x2F;将给定值绑定到二元函数对象的第二个实参；返回值是一元函数对象；
+
+bind &#x2F;&#x2F;实用性更好的函数绑定器;</code></pre>
+
+<p>例子<code>bind1sr,bind2nd</code>相关</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">vector&lt;int&gt; numberVec &#x3D; &#123;1, 3, 7, 8, 1, 2, 5, 7, 9, 4, 6, 7&#125;;                         copy(numberVec.begin(), numberVec.end(), ostream_iterator&lt;int&gt;(cout, &quot;  &quot;));
+cout &lt;&lt; endl;
+&#x2F;&#x2F;使用2nd绑定greater二元函数，转化为一元。给定值绑定到第二个实参。
+auto it &#x3D; remove_if(numberVec.begin(), numberVec.end(), 
+                    bind2nd(std::greater&lt;int&gt;(), 4));
+&#x2F;&#x2F;使用1st绑定less二元函数，转化为一元。给定值绑定到第一个参数。
+auto it1 &#x3D; remove_if(numberVec.begin(), numberVec.end(), 
+                    bind1st(std::less&lt;int&gt;(), 4)); 
+</code></pre>
+
+<p>例子<code>bind</code>相关</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;functional&gt;
+
+using namespace std;
+
+int add(int x , int y) &#123;
+    cout &lt;&lt; &quot;int add(int, int)&quot; &lt;&lt; endl;
+    return x + y;
+&#125;
+
+class Test &#123;
+public:
+    int add(int x , int y) &#123;
+        cout &lt;&lt; &quot;int Test::add(int, int)&quot; &lt;&lt; endl;
+        return x + y;
+    &#125;
+
+    int data &#x3D; 135;&#x2F;&#x2F;C++11新的方式初始化数据
+&#125;;
+
+
+int func(int x, int y, int z) &#123;
+    cout &lt;&lt; &quot;int add(int, int, int )&quot; &lt;&lt; endl;
+    return x + y + z;
+&#125;
+
+void test() &#123;
+    &#x2F;* vector&lt;int&gt; number; *&#x2F;
+    &#x2F;&#x2F;add   int(int, int) &#x3D; int()
+    &#x2F;&#x2F;f的类型int(),函数也是有类型，通过函数的返回类型和参数列表进行控制
+    &#x2F;* auto f &#x3D; std::bind(add, 1, 2); *&#x2F;
+    &#x2F;&#x2F;std::function是函数的容器
+    std::function&lt;int()&gt; f &#x3D; std::bind(add, 1, 2);
+    cout &lt;&lt; &quot;f() &#x3D; &quot; &lt;&lt; f() &lt;&lt; endl;
+
+    Test tst;
+    &#x2F;* auto f2 &#x3D; bind(&amp;Test::add, &amp;tst, 3, 4); *&#x2F;
+    std::function&lt;int()&gt; f2 &#x3D; bind(&amp;Test::add, &amp;tst, 3, 4);
+    cout &lt;&lt; &quot;f2() &#x3D; &quot; &lt;&lt; f2() &lt;&lt; endl;
+
+    &#x2F;* auto f3 &#x3D; bind(func, 1, 2, 3); *&#x2F;
+    std::function&lt;int()&gt; f3 &#x3D; bind(func, 1, 2, 3);
+    cout &lt;&lt;&quot;f3() &#x3D; &quot; &lt;&lt; f3() &lt;&lt; endl;
+
+    &#x2F;&#x2F;占位符
+    &#x2F;&#x2F;add int(int, int)
+    &#x2F;&#x2F;int(int)
+    &#x2F;* auto f4 &#x3D; bind(add, 1, std::placeholders::_1);&#x2F;&#x2F;占位符 *&#x2F;
+    std::function&lt;int(int)&gt; f4 &#x3D; bind(add, 1, std::placeholders::_1);&#x2F;&#x2F;占位符
+    cout &lt;&lt; &quot;f4(5) &#x3D; &quot; &lt;&lt; f4(5) &lt;&lt; endl;
+
+    std::function&lt;int()&gt; f5 &#x3D; bind(&amp;Test::data, &amp;tst);&#x2F;&#x2F;bind绑定到数据成员
+    cout &lt;&lt; &quot;f5() &#x3D; &quot; &lt;&lt; f5() &lt;&lt; endl;
+&#125;
+
+typedef int (*pFunc)();&#x2F;&#x2F;函数指针
+
+int func1() &#123;
+    return 5;
+&#125;
+
+int func2() &#123;
+    return 10;
+&#125;
+
+int func3(int x) &#123;
+    return x;
+&#125;
+void test2() &#123;
+    pFunc f &#x3D; func1; &#x2F;&#x2F;用f注册回调函数
+    cout &lt;&lt; &quot;f() &#x3D; &quot; &lt;&lt; f() &lt;&lt; endl;&#x2F;&#x2F;执行回调函数
+
+    f &#x3D; func2;
+    cout &lt;&lt; &quot;f() &#x3D; &quot; &lt;&lt; f() &lt;&lt; endl;
+
+    &#x2F;* f &#x3D; func3; *&#x2F;
+&#125;
+
+void func4(int x1, int x2, int x3, const int &amp;x4, int x5) &#123;
+    cout &lt;&lt; &quot;x1 &#x3D; &quot; &lt;&lt; x1 
+         &lt;&lt; &quot;, x2 &#x3D; &quot; &lt;&lt; x2 
+         &lt;&lt; &quot;, x3 &#x3D; &quot; &lt;&lt; x3 
+         &lt;&lt; &quot;, x4 &#x3D; &quot; &lt;&lt; x4 
+         &lt;&lt; &quot;, x5 &#x3D; &quot; &lt;&lt; x5 &lt;&lt; endl;
+&#125;
+
+void test4() &#123;
+    &#x2F;&#x2F;占位符本身表示形参的位置
+    &#x2F;&#x2F;占位符中的下划线的数字表示实参的位置
+    &#x2F;&#x2F;引用包装器cref &#x3D; c &#x3D; const  ref &#x3D; reference
+    &#x2F;&#x2F;不使用引用包装器时，bind的参数是值传递
+    &#x2F;&#x2F;ref
+    int number &#x3D; 100;
+    auto f &#x3D; bind(func4, 1, std::placeholders::_9, 
+                  std::placeholders::_3, std::cref(number), number);
+    number &#x3D; 12345;
+  
+    f(16, 27, 19, 200, 300, 500, 100, 200, 300);
+&#125;
+int main(int argc, char **argv) &#123;
+    test();
+    return 0;
+&#125;</code></pre>
+
+<p>相关博客推荐：</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/qicosmos/p/3723388.html">std::bind技术内幕</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/xusd-null/p/3698969.html">std::bind原理图示</a></p>
+<p>2.求反器</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">not1 &#x2F;&#x2F;对一元函数对象的结果取反;
+
+not2 &#x2F;&#x2F;对二元函数对象的结果取反;</code></pre>
+
+<p>例子<code>not1，not2</code>相关</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">&#x2F;&#x2F;如下语句功能是统计小于等于5的元素个数，用到了表示 &lt;&#x3D; 的函数对象less_equal&lt;Type&gt;；
+size_t n1 &#x3D; count_if(ivec.begin(), ivec.end(), bind2nd(less_equal&lt;int&gt;(), 5));
+
+&#x2F;&#x2F;如果改为统计不小于等于5的元素个数，修改语句如下：
+size_t n1 &#x3D; count_if(ivec.begin(), ivec.end(), not1(bind2nd(less_equal&lt;int&gt;(), 5)));
+&#x2F;&#x2F;因为bind2nd返回的是一元函数对象，所以使用not1，而不是not2；</code></pre>
+
+
+
+<p><em>成员函数适配器</em></p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">mem_fun() &#x2F;&#x2F;已废弃 
+
+mem_fun_ref() &#x2F;&#x2F;已废弃
+
+mem_fn() &#x2F;&#x2F;把成员函数转为函数对象，使用对象指针或对象(引用)进行绑定
+    	 &#x2F;&#x2F;相对于bind使用起来更轻量，更简洁。</code></pre>
+
+<p>例子<code>mem_fn</code>相关</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;functional&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+
+using namespace std;
+
+class Number &#123;
+public:
+    Number(size_t data &#x3D; 0):_data(data)&#123;&#125;
+
+    void print() const &#123;
+        cout &lt;&lt; _data &lt;&lt; &quot;  &quot;;
+    &#125;
+
+    bool isEven() const &#123;
+        return (0 &#x3D;&#x3D; _data % 2);
+    &#125;
+
+    bool isPrime() const &#123;
+        if(1 &#x3D;&#x3D; _data) &#123;
+            return false;
+        &#125;
+
+        &#x2F;&#x2F;质数&#x2F;素数
+        for(size_t idx &#x3D; 2; idx &lt;&#x3D; _data&#x2F;2; ++idx) &#123;
+            if(0 &#x3D;&#x3D; _data % idx) &#123;
+                return false;
+            &#125;
+        &#125;
+
+        return true;
+    &#125;
+
+private:
+    size_t _data;
+&#125;;
+
+void test() &#123;
+    vector&lt;Number&gt; numbers;
+    for(size_t idx &#x3D; 1; idx !&#x3D; 30; ++idx) &#123;
+        numbers.push_back(Number(idx));
+    &#125;
+
+    std::for_each(numbers.begin(), numbers.end(), mem_fn(&amp;Number::print));
+    &#x2F;* std::for_each(numbers.begin(), numbers.end(), &amp;Number::print); *&#x2F;
+    cout &lt;&lt; endl;
+
+    &#x2F;&#x2F;erase函数参数之前说过，两个参数，
+    numbers.erase(remove_if(numbers.begin(), numbers.end(), mem_fn(&amp;Number::isEven)), numbers.end());
+    std::for_each(numbers.begin(), numbers.end(), mem_fn(&amp;Number::print));
+    cout &lt;&lt; endl;
+
+    numbers.erase(remove_if(numbers.begin(), numbers.end(), mem_fn(&amp;Number::isPrime)), numbers.end());
+    std::for_each(numbers.begin(), numbers.end(), mem_fn(&amp;Number::print));
+    cout &lt;&lt; endl;
+&#125;
+
+int main(int argc, char **argv) &#123;
+    test();
+    return 0;
+&#125;</code></pre>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/STL/" rel="tag"><i class="fa fa-tag"></i> STL</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/04/24/C++STL-algorithms/" rel="prev" title="C++STLalgorithms">
+                  <i class="fa fa-chevron-left"></i> C++STLalgorithms
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/04/24/C++STL%E5%87%BD%E6%95%B0%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%8C%85%E8%A3%85%E5%99%A8/" rel="next" title="C++STL函数对象的包装器">
+                  C++STL函数对象的包装器 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wbahh</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/components/prism-core.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/autoloader/prism-autoloader.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

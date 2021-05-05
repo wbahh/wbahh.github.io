@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"wbahh.com","root":"/","images":"/images","scheme":"Gemini","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":true,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
+  </script>
+<meta name="description" content="initializer_list相关">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++initializer_list">
+<meta property="og:url" content="http://wbahh.com/2021/04/23/C++%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%97%E8%A1%A8/index.html">
+<meta property="og:site_name" content="wbahh">
+<meta property="og:description" content="initializer_list相关">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-23T03:06:55.000Z">
+<meta property="article:modified_time" content="2021-04-24T15:36:48.000Z">
+<meta property="article:author" content="wbahh">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://wbahh.com/2021/04/23/C++%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%97%E8%A1%A8/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+<title>C++initializer_list | wbahh</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">wbahh</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">个人博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">22</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">15</span></a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="wbahh"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">wbahh</p>
+  <div class="site-description" itemprop="description">欢喜也只得中庸</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button site-overview-item animated"><i class="fa fa-comment"></i>
+    Chat
+  </a>
+  </div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wbahh" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wbahh" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wangyutong551@yeah.net" title="E-Mail → mailto:wangyutong551@yeah.net" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://wbahh.com/2021/04/23/C++%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%97%E8%A1%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="wbahh">
+      <meta itemprop="description" content="欢喜也只得中庸">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wbahh">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++initializer_list
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-04-23 11:06:55" itemprop="dateCreated datePublished" datetime="2021-04-23T11:06:55+08:00">2021-04-23</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-04-24 23:36:48" itemprop="dateModified" datetime="2021-04-24T23:36:48+08:00">2021-04-24</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>initializer_list相关</p>
+<span id="more"></span>
+
+<p>目的：<strong>为了完成C++自定义的类使用{}进行初始化。</strong></p>
+<p>initializer_list是C++11提供的新类型，定义在<code>initializer_list</code>头文件中,用于表示某种特定类型的值的数组，和vector一样，initializer_list也是一种模板类型。</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">template&lt; class T &gt;
+class initializer_list;</code></pre>
+
+<p>关于初始化列表</p>
+<p>C++11扩大了初始化列表的适用范围，使其可用于所有内置类型和用户定义的类型。无论是初始化对象还是某些时候为对象赋新值，都可以使用这样一组由花括号括起来的初始值了。使用初始化列表时，可添加=，也可不添加。</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">&#x2F;&#x2F;定义一个变量并初始化
+int s1 &#x3D; 0;
+int s1(0);
+int s1 &#x3D; &#123;0&#125;;  &#x2F;&#x2F;列表初始化
+int s1&#123;0&#125;;    &#x2F;&#x2F;列表初始化</code></pre>
+
+<p>当初始化列表用于内置类型的变量时，且我们使用列表初始化值存在丢失信息的风险，则编译器将报错：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">long double ld &#x3D; 3.1415926536;
+int a &#x3D; &#123;ld&#125;; &#x2F;&#x2F;错误:转换未执行，因为存在丢失信息的风险
+int c(ld), d &#x3D; ld;   &#x2F;&#x2F;正确:转换执行，且确实丢失了部分值</code></pre>
+
+<p>initializer_list函数</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">initializer_list&lt;T&gt; lst; 
+&#x2F;&#x2F;默认初始化；T类型元素的空列表
+initializer_list&lt;T&gt; lst&#123;a,b,c...&#125;;
+&#x2F;&#x2F;lst的元素数量和初始值一样多；lst的元素是对应初始值的副本
+lst2(lst)   
+lst2&#x3D;lst  
+&#x2F;&#x2F;拷贝或赋值一个initializer_list对象不会拷贝列表中的元素；拷贝后，原始列表和副本元素共享&#x2F;&#x2F;浅拷贝
+lst.size()  &#x2F;&#x2F;列表中的元素数量
+lst.begin()  &#x2F;&#x2F;返回指向lst中首元素的指针
+lst.end()   &#x2F;&#x2F;返回指向lst中尾元素下一位置的指针</code></pre>
+
+<p>initializer_list对象中的元素永远是<code>常量值</code>，initializer_list对象中元素的值无法被改变。并且，拷贝或赋值一个initializer_list对象不会拷贝列表中的元素，其实只是引用而已，原始列表和副本共享元素。</p>
+<p>使用迭代器进行访问initializer_list对象</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">void test(initializer_list&lt;string&gt; il)
+&#123;
+   &#x2F;&#x2F;for(auto beg&#x3D;il.begin();beg!&#x3D;il.end();++beg)
+    for(auto &amp;beg : il)
+      cout&lt;&lt;*beg&lt;&lt;&quot; &quot;;
+   cout&lt;&lt;endl;
+&#125;</code></pre>
+
+<p>如果想向initializer_list形参中传递一个值的序列，则必须把序列放在一对花括号内：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">&#x2F;&#x2F;expected和actual是string对象
+if(expected !&#x3D; actual)
+   error_msg(&#123;&quot;functionX&quot;,expectde,actual&#125;);
+else
+   error_msg(&#123;&quot;functionX&quot;,&quot;okay&quot;&#125;);</code></pre>
+
+<p>initializer_list使用场景：</p>
+<p>对于STL的container的初始化就方便多了,比如以前初始化一个vector需要这样：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">std::vector v;
+v.push_back(1);
+v.push_back(2);
+v.push_back(3);
+v.push_back(4);</code></pre>
+
+<p>c++11添加了initializer_list后，我们可以这样初始化:</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">std::vector v &#x3D; &#123; 1, 2, 3, 4 &#125;;</code></pre>
+
+<p><strong>并且，C++11允许构造函数和其他函数把初始化列表当做参数。也就是说我们可以在自定义类的构造函数中使用initializer_list进行对象的初始化，就好像重载了{}一样。</strong></p>
+<p><strong>方法一</strong>：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+class MyNumber
+&#123;
+public:
+    MyNumber(const std::initializer_list&lt;int&gt; &amp;v) &#123;
+        for (auto itm : v) &#123;
+            mVec.push_back(itm);
+        &#125;
+    &#125;
+
+    void print() &#123;
+    for (auto itm : mVec) &#123;
+        std::cout &lt;&lt; itm &lt;&lt; &quot; &quot;;
+    &#125;
+  &#125;
+private:
+    std::vector&lt;int&gt; mVec;
+&#125;;
+
+int main()
+&#123;
+    MyNumber m &#x3D; &#123; 1, 2, 3, 4 &#125;;
+    m.print();  &#x2F;&#x2F; 1 2 3 4
+
+    return 0;
+&#125;</code></pre>
+
+<p>关于{}初始化对象的<strong>方法二</strong>：类满足 <a target="_blank" rel="noopener" href="http://en.cppreference.com/w/cpp/language/aggregate_initialization">aggregate class</a> 的条件，则自动可以使用大括号列表来初始化类的成员。</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">一个类是 aggregate class 的条件是：
+    所有的非常量数据成员（non-static data member）是公有的（public）
+    没有定义任何构造函数（但可以使用&#x3D; default或&#x3D; delete）
+    没有基类
+    没有虚成员函数
+    没有类内初始化（C++14后废除）
+</code></pre>
+
+<p>例如：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">struct C &#123;
+  int i;
+  std::string s;
+  double d;
+&#125;;
+
+可以使用如下初始化：
+C c &#x3D; &#123; 10, &quot;abc&quot;, 6.66 &#125;;</code></pre>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/04/22/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/" rel="prev" title="lambda表达式">
+                  <i class="fa fa-chevron-left"></i> lambda表达式
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/04/23/%E5%AE%9A%E4%BD%8Dnew%E8%A1%A8%E8%BE%BE%E5%BC%8F/" rel="next" title="定位new表达式">
+                  定位new表达式 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wbahh</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/components/prism-core.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/autoloader/prism-autoloader.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

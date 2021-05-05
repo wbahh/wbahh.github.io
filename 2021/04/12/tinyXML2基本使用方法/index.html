@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"wbahh.com","root":"/","images":"/images","scheme":"Gemini","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":true,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
+  </script>
+<meta name="description" content="tinyXML2的简单使用总结。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tinyXML2基本使用方法">
+<meta property="og:url" content="http://wbahh.com/2021/04/12/tinyXML2%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:site_name" content="wbahh">
+<meta property="og:description" content="tinyXML2的简单使用总结。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-12T00:30:23.000Z">
+<meta property="article:modified_time" content="2021-04-25T12:25:48.000Z">
+<meta property="article:author" content="wbahh">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="tinyXML2">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://wbahh.com/2021/04/12/tinyXML2%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+<title>tinyXML2基本使用方法 | wbahh</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">wbahh</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">个人博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">22</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">15</span></a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1%E5%A4%B4%E6%96%87%E4%BB%B6"><span class="nav-number">1.</span> <span class="nav-text">2.1头文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2%E5%87%BD%E6%95%B0%E4%BD%BF%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">2.2函数使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-1%E5%88%9B%E5%BB%BAXML%E6%96%87%E4%BB%B6"><span class="nav-number">2.1.</span> <span class="nav-text">2.2.1创建XML文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-3%E6%9F%A5%E8%AF%A2-XML-%E6%96%87%E4%BB%B6%E7%9A%84%E6%8C%87%E5%AE%9A%E8%8A%82%E7%82%B9"><span class="nav-number">2.2.</span> <span class="nav-text">2.2.3查询 XML 文件的指定节点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-4%E4%BF%AE%E6%94%B9-XML-%E6%96%87%E4%BB%B6%E7%9A%84%E6%8C%87%E5%AE%9A%E8%8A%82%E7%82%B9"><span class="nav-number">2.3.</span> <span class="nav-text">2.2.4修改 XML 文件的指定节点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-5%E5%88%A0%E9%99%A4-XML-%E6%96%87%E4%BB%B6%E7%9A%84%E6%8C%87%E5%AE%9A%E8%8A%82%E7%82%B9%E5%86%85%E5%AE%B9"><span class="nav-number">2.4.</span> <span class="nav-text">2.2.5删除 XML 文件的指定节点内容</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-1%E8%8E%B7%E5%8F%96-XML-%E6%96%87%E4%BB%B6%E7%94%B3%E6%98%8E"><span class="nav-number">2.5.</span> <span class="nav-text">3.1.1获取 XML 文件申明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-2%E6%89%93%E5%8D%B0-XML-%E6%96%87%E4%BB%B6%E8%87%B3%E6%A0%87%E5%87%86%E8%BE%93%E5%87%BA"><span class="nav-number">2.6.</span> <span class="nav-text">3.1.2打印 XML 文件至标准输出</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-3XML-%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9%E8%BE%93%E5%87%BA%E8%87%B3%E5%86%85%E5%AD%98"><span class="nav-number">2.7.</span> <span class="nav-text">3.1.3XML 文件内容输出至内存</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TinyXML2%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">TinyXML2的基本使用</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="wbahh"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">wbahh</p>
+  <div class="site-description" itemprop="description">欢喜也只得中庸</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button site-overview-item animated"><i class="fa fa-comment"></i>
+    Chat
+  </a>
+  </div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wbahh" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wbahh" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wangyutong551@yeah.net" title="E-Mail → mailto:wangyutong551@yeah.net" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://wbahh.com/2021/04/12/tinyXML2%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="wbahh">
+      <meta itemprop="description" content="欢喜也只得中庸">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wbahh">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          tinyXML2基本使用方法
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-04-12 08:30:23" itemprop="dateCreated datePublished" datetime="2021-04-12T08:30:23+08:00">2021-04-12</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-04-25 20:25:48" itemprop="dateModified" datetime="2021-04-25T20:25:48+08:00">2021-04-25</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/C/tinyXML2/" itemprop="url" rel="index"><span itemprop="name">tinyXML2</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>tinyXML2的简单使用总结。</p>
+<span id="more"></span>
+
+<p>##1.能干什么</p>
+<p>对于 XML 文件可以新建 XML 文件、增加 XML 文件的节点，删除XML文件的指定节点，查询 XML 文件指定节点的值，修改 XML 文件节点的值。</p>
+<h3 id="2-1头文件"><a href="#2-1头文件" class="headerlink" title="2.1头文件"></a>2.1头文件</h3><p>首先将 tinyxml2.cpp 和 tinyxml2.h 拷贝至项目目录下，使用时需要包含头文件和引入命名空间。</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">#include &quot;tinyxml2.h&quot;
+using namespace tinyxml2</code></pre>
+
+<p>一个简单的XML文件示例</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">&lt;?xml version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;UTF-8&quot; standalone&#x3D;&quot;no&quot;?&gt; &#x2F;&#x2F;声明
+&lt;Root&gt; &#x2F;&#x2F;根节点
+	&lt;item Name&#x3D;”aaaa” Password &#x3D;”123”&gt; &#x2F;&#x2F;其他节点
+		&lt;Gender&gt;&lt;&#x2F;Gender&gt;   &#x2F;&#x2F;其他节点的子节点
+		&lt;Mobile&gt;&lt;&#x2F;Mobile&gt;	&#x2F;&#x2F;其他节点的子节点
+		&lt;Email&gt;&lt;&#x2F;Email &gt;	&#x2F;&#x2F;其他节点的子节点
+	&lt;&#x2F;item&gt;
+	&lt;!-- This is a comment --&gt; 
+&lt;&#x2F;Root&gt; &#x2F;&#x2F;根节点结束标志</code></pre>
+
+<p>XML 文件一般由三大部分组成，分别是声明、根节点和其它节点。其中 XML 文件的声明包括三方面的内容：Version、Standalone 和 Encoding。</p>
+<h3 id="2-2函数使用"><a href="#2-2函数使用" class="headerlink" title="2.2函数使用"></a>2.2函数使用</h3><h4 id="2-2-1创建XML文件"><a href="#2-2-1创建XML文件" class="headerlink" title="2.2.1创建XML文件"></a>2.2.1创建XML文件</h4><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">&#x2F;&#x2F;function：create a xml file
+&#x2F;&#x2F;param：xmlPath:xml文件路径
+&#x2F;&#x2F;return：0,成功；非0，失败
+int createXML(const char* xmlPath)
+&#123;
+	const char* declaration &#x3D;&quot;&lt;?xml version&#x3D;\&quot;1.0\&quot; encoding&#x3D;\&quot;UTF-8\&quot; standalone&#x3D;\&quot;no\&quot;?&gt;&quot;;
+	XMLDocument doc;
+	doc.Parse(declaration);&#x2F;&#x2F;会覆盖xml所有内容
+	
+	&#x2F;&#x2F;添加申明可以使用如下两行
+	&#x2F;&#x2F;XMLDeclaration* declaration&#x3D;doc.NewDeclaration();
+	&#x2F;&#x2F;doc.InsertFirstChild(declaration);
+
+	XMLElement* root&#x3D;doc.NewElement(&quot;Root&quot;);
+	doc.InsertEndChild(root);
+
+	return doc.SaveFile(xmlPath);
+&#125;</code></pre>
+
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">&lt;?xml version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;UTF-8&quot; standalone&#x3D;&quot;no&quot;?&gt;
+&lt;DBUSER&#x2F;&gt;</code></pre>
+
+<p>####2.2.2增加 XML 文件的节点</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">struct RssItem &#123;
+    string title;
+    string link;
+    string description;
+    string content;
+&#125;;
+    
+class RssReader &#123;
+public:
+    RssReader();
+    void parseRss();&#x2F;&#x2F;解析
+    void dump(const string &amp; filename);&#x2F;&#x2F;输出
+private:
+    vector&lt;RssItem&gt; _rss;
+&#125;; 
+
+&#x2F;&#x2F;function：insert XML node
+&#x2F;&#x2F;param：xmlPath xml 文件路径; read 对象
+&#x2F;&#x2F;return：0 成功; 非 0 失败
+int insertXMLNode(const char* xmlPath,const RssItem&amp; read) &#123;
+    XMLDocument doc;
+    int res&#x3D;doc.LoadFile(xmlPath);&#x2F;&#x2F;载入xml文件
+    if(res!&#x3D;0) &#123;
+        cout&lt;&lt;&quot;load xml file failed&quot;&lt;&lt;endl;
+        return res;
+    &#125;
+    XMLElement* root&#x3D;doc.RootElement();&#x2F;&#x2F;取得根节点
+
+    XMLElement* Node &#x3D; doc.NewElement(&quot;item&quot;);&#x2F;&#x2F;创建一个新结点
+    root-&gt;InsertEndChild(Node);&#x2F;&#x2F;将节点插入根节点的最后
+
+    XMLElement* title &#x3D; doc.NewElement(&quot;title&quot;);&#x2F;&#x2F;创建一个新结点
+    XMLText* titleText&#x3D;doc.NewText(read.title.c_str());&#x2F;&#x2F;创建一个节点内容
+    title-&gt;InsertEndChild(titleText);&#x2F;&#x2F;将节点内容加入到title节点中
+    Node-&gt;InsertEndChild(title);&#x2F;&#x2F;将title节点插入到Node节点的最后
+
+    XMLElement* link &#x3D; doc.NewElement(&quot;link&quot;);
+    XMLText* linkText&#x3D;doc.NewText(read.link.c_str());
+    link-&gt;InsertEndChild(linkText);
+    Node-&gt;InsertEndChild(link);
+
+    XMLElement* desc &#x3D; doc.NewElement(&quot;description&quot;);
+    desc-&gt;InsertEndChild(doc.NewText(read.description.c_str()));&#x2F;&#x2F;简介写法。
+    Node-&gt;InsertEndChild(desc);
+
+    XMLElement* content &#x3D; doc.NewElement(&quot;content&quot;);
+    content-&gt;InsertEndChild(doc.NewText(read.content.c_str()));
+    Node-&gt;InsertEndChild(content);
+
+    return doc.SaveFile(xmlPath);
+
+&#125;</code></pre>
+
+<p>结果：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">&lt;?xml version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;UTF-8&quot; standalone&#x3D;&quot;no&quot;?&gt;  
+  &lt;Root&gt;
+      &lt;item&gt;
+          &lt;title&gt;hehe&lt;&#x2F;title&gt;
+          &lt;link&gt;https:&#x2F;&#x2F;wbahh.com&lt;&#x2F;link&gt;
+          &lt;description&gt;jintiantianjizhenhaoya&lt;&#x2F;description
+          &lt;content&gt;maomaochong&lt;&#x2F;content&gt;
+      &lt;&#x2F;item&gt;
+  &lt;&#x2F;Root&gt;</code></pre>
+
+<h4 id="2-2-3查询-XML-文件的指定节点"><a href="#2-2-3查询-XML-文件的指定节点" class="headerlink" title="2.2.3查询 XML 文件的指定节点"></a>2.2.3查询 XML 文件的指定节点</h4><p>Xml文件中，一个节点存储一个节点相关的信息。因此，对节点信息的增删查改，即无论查询节点、删除节点、修改节点和增加节点，都需要先获取目标节点。那么先实现一个根据title内容获取节点指针的函数：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">&#x2F;&#x2F;function:根据用户名获取用户节点
+&#x2F;&#x2F;param:root:xml文件根节点；userName：用户名
+&#x2F;&#x2F;return：用户节点
+XMLElement* queryItemByTitle(XMLElement* root,const string&amp; title) &#123;    
+    XMLElement* titleNode&#x3D;root-&gt;FirstChildElement();
+    while(titleNode !&#x3D; NULL) &#123;
+        if(titleNode-&gt;Name() &#x3D;&#x3D; title) &#123;
+            &#x2F;* if(userNode-&gt;Attribute(&quot;Name&quot;)&#x3D;&#x3D;userName) &#x2F;&#x2F;可以通过查找节点的参数和变量来找到指定节点*&#x2F;
+            break;
+        &#125;
+        titleNode &#x3D; titleNode-&gt;NextSiblingElement();&#x2F;&#x2F;下一个兄弟节点
+    &#125;
+    return titleNode;
+&#125;</code></pre>
+
+<h4 id="2-2-4修改-XML-文件的指定节点"><a href="#2-2-4修改-XML-文件的指定节点" class="headerlink" title="2.2.4修改 XML 文件的指定节点"></a>2.2.4修改 XML 文件的指定节点</h4><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">&#x2F;&#x2F;function:修改指定节点内容
+&#x2F;&#x2F;param:xmlPath:xml文件路径；user：用户对象
+&#x2F;&#x2F;return：bool
+bool updateItem(const char *xmlPath, RssItem &amp;item) &#123;
+    XMLDocument doc;
+    if(doc.LoadFile(xmlPath) !&#x3D; 0) &#123;
+        cout &lt;&lt; &quot;load xml file failed&quot; &lt;&lt; endl;
+        return false;
+    &#125;
+    XMLElement *root &#x3D; doc.RootElement();
+    XMLElement *itemNode &#x3D; queryItemByTitle(root,item.title);
+
+    if(itemNode !&#x3D; NULL) &#123;
+
+        if(item.title !&#x3D; itemNode-&gt;Attribute(&quot;title&quot;)) &#123; &#x2F;&#x2F;
+            itemNode-&gt;SetAttribute(&quot;title&quot;, item.title.c_str());  &#x2F;&#x2F;修改节点属性
+        &#125;
+
+        XMLElement* linkNode &#x3D; itemNode-&gt;FirstChildElement(&quot;link&quot;);
+        if(item.link !&#x3D; linkNode-&gt;GetText()) &#123;
+            linkNode-&gt;SetText(item.link.c_str());   &#x2F;&#x2F;修改节点内容
+        &#125;
+        if(doc.SaveFile(xmlPath) &#x3D;&#x3D; 0)
+            return true;
+    &#125;
+    return false;
+&#125;
+</code></pre>
+
+<h4 id="2-2-5删除-XML-文件的指定节点内容"><a href="#2-2-5删除-XML-文件的指定节点内容" class="headerlink" title="2.2.5删除 XML 文件的指定节点内容"></a>2.2.5删除 XML 文件的指定节点内容</h4><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">&#x2F;&#x2F;function:删除指定节点内容
+&#x2F;&#x2F;param:xmlPath:xml文件路径；userName：用户名称
+&#x2F;&#x2F;return：bool
+bool deleteItemByTitle(const char* xmlPath,const string&amp; title) &#123;
+    XMLDocument doc;
+    if(doc.LoadFile(xmlPath) !&#x3D; 0) &#123;
+        cout &lt;&lt; &quot;load xml file failed&quot; &lt;&lt; endl;
+        return false;
+    &#125;
+
+    XMLElement* root&#x3D;doc.RootElement();
+    doc.DeleteNode(root);&#x2F;&#x2F;删除xml所有节点
+    XMLElement* itemNode&#x3D;queryItemByTitle(root,title);
+    if(itemNode !&#x3D; NULL) &#123;
+        itemNode-&gt;DeleteAttribute(&quot;itemName&quot;);&#x2F;&#x2F;删除属性
+        XMLElement* linkNode&#x3D;itemNode-&gt;FirstChildElement(&quot;link&quot;);
+        itemNode-&gt;DeleteChild(linkNode); &#x2F;&#x2F;删除指定节点
+        &#x2F;&#x2F;itemNode-&gt;DeleteChildren();&#x2F;&#x2F;删除节点的所有孩子节点
+        if(doc.SaveFile(xmlPath)&#x3D;&#x3D;0)
+            return true;
+    &#125;
+    return false;
+&#125;</code></pre>
+
+<p>###3.1其它常见用例</p>
+<h4 id="3-1-1获取-XML-文件申明"><a href="#3-1-1获取-XML-文件申明" class="headerlink" title="3.1.1获取 XML 文件申明"></a>3.1.1获取 XML 文件申明</h4><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">&#x2F;&#x2F;function:获取xml文件申明
+&#x2F;&#x2F;param:xmlPath:xml文件路径；strDecl：xml申明
+&#x2F;&#x2F;return：bool
+bool getXMLDeclaration(const char* xmlPath,string&amp; strDecl)
+&#123;
+	XMLDocument doc;
+	if(doc.LoadFile(xmlPath)!&#x3D;0)
+	&#123;
+		cout&lt;&lt;&quot;load xml file failed&quot;&lt;&lt;endl;
+		return false;
+	&#125;
+	XMLNode* decl&#x3D;doc.FirstChild();  
+	if (NULL!&#x3D;decl)  
+    &#123;  
+        XMLDeclaration* declaration &#x3D;decl-&gt;ToDeclaration();  
+        if (NULL!&#x3D;declaration)  
+        &#123;  
+              strDecl &#x3D; declaration-&gt;Value();
+			  return true;
+        &#125; 
+    &#125;
+   	return false;
+&#125;</code></pre>
+
+<h4 id="3-1-2打印-XML-文件至标准输出"><a href="#3-1-2打印-XML-文件至标准输出" class="headerlink" title="3.1.2打印 XML 文件至标准输出"></a>3.1.2打印 XML 文件至标准输出</h4><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">&#x2F;&#x2F;function:将xml文件内容输出到标准输出
+&#x2F;&#x2F;param:xmlPath:xml文件路径
+void print(const char* xmlPath)
+&#123;
+	XMLDocument doc;
+	if(doc.LoadFile(&quot;.&#x2F;user.xml&quot;)!&#x3D;0)
+	&#123;
+		cout&lt;&lt;&quot;load xml file failed&quot;&lt;&lt;endl;
+		return;
+	&#125;
+	doc.Print();
+&#125;</code></pre>
+
+<h4 id="3-1-3XML-文件内容输出至内存"><a href="#3-1-3XML-文件内容输出至内存" class="headerlink" title="3.1.3XML 文件内容输出至内存"></a>3.1.3XML 文件内容输出至内存</h4><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">XMLPrinter printer;
+doc.Print( &amp;printer );
+&#x2F;&#x2F; printer.CStr() has a const char* to the XML</code></pre>
+
+
+
+
+
+<!--RSS作业在使用时候，只需要将tinyxml2.cpp与tinyxml2.h文件添加到rss待写目录下面即可-->。
+
+<h3 id="TinyXML2的基本使用"><a href="#TinyXML2的基本使用" class="headerlink" title="TinyXML2的基本使用"></a>TinyXML2的基本使用</h3><p>XMLDocument：代表整个XML文件。</p>
+<p>XMLNode：XML文件是由节点组成的，节点之间是树形结构，所以就有根节点、父节点、子节点、兄弟节点。</p>
+<p>XMLElement：对应于XML的元素。</p>
+<p>XMLAttribute：对应于XML中的元素的属性。</p>
+<p>XMLText：对应于XML的文字部分</p>
+<p>XMLComment：XML中的注释。</p>
+<p>XmlUnknown：对应于XML的未知部分。         </p>
+<p>XmlHandler：定义了针对XML的一些操作。  </p>
+<p>相关函数：</p>
+<p>加载文件信息，即：针对哪个文件进行处理。</p>
+<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">XMLError XMLDocument::LoadFile( const char* filename )</code></pre>
+
+<p>类似C语言中文件打开fopen后，需要检查打开是否失败，有函数ErrorID。正常打开返回XML_SUCCESS=0</p>
+<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">XMLError  ErrorID() const &#123;
+    return _errorID;
+&#125;</code></pre>
+
+<p>XMLError：错误信息使用枚举值。</p>
+<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">enum XMLError &#123;
+    XML_SUCCESS &#x3D; 0,
+    XML_NO_ATTRIBUTE,
+    XML_WRONG_ATTRIBUTE_TYPE,
+    XML_ERROR_FILE_NOT_FOUND,
+    XML_ERROR_FILE_COULD_NOT_BE_OPENED,
+    XML_ERROR_FILE_READ_ERROR,
+    XML_ERROR_PARSING_ELEMENT,
+    XML_ERROR_PARSING_ATTRIBUTE,
+    XML_ERROR_PARSING_TEXT,
+    XML_ERROR_PARSING_CDATA,
+    XML_ERROR_PARSING_COMMENT,
+    XML_ERROR_PARSING_DECLARATION,
+    XML_ERROR_PARSING_UNKNOWN,
+    XML_ERROR_EMPTY_DOCUMENT,
+    XML_ERROR_MISMATCHED_ELEMENT,
+    XML_ERROR_PARSING,
+    XML_CAN_NOT_CONVERT_TEXT,
+    XML_NO_TEXT_NODE,
+    XML_ELEMENT_DEPTH_EXCEEDED,
+
+    XML_ERROR_COUNT
+&#125;;</code></pre>
+
+<p>因为xml文件是树形结构的文件，所以势必会有根节点、父子节点、兄弟节点。</p>
+<p>获取根节点：(因为获取跟节点其实底层调用的还是FirstChildElement,所以直接使用FirstChildElement)</p>
+<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">XMLElement* RootElement() &#123;
+       return FirstChildElement();
+&#125;</code></pre>
+
+<p>其中的FirstChildElement函数原型：</p>
+<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">const XMLElement* FirstChildElement( const char* name &#x3D; 0 ) const;
+const XMLElement* XMLNode::FirstChildElement( const char* name ) const
+&#123;
+    for( const XMLNode* node &#x3D; _firstChild; node; node &#x3D; node-&gt;_next ) &#123;
+        const XMLElement* element &#x3D; node-&gt;ToElementWithName( name );
+        if ( element ) &#123;
+            return element;
+        &#125;
+    &#125;
+    return 0;
+&#125;
+
+XMLElement* FirstChildElement( const char* name &#x3D; 0 )   &#123;
+    return const_cast&lt;XMLElement*&gt;(const_cast&lt;const XMLNode*&gt;(this)-&gt;FirstChildElement( name ));
+&#125;</code></pre>
+
+<p>因为FirstChildElement返回值还是XMLElement类型的指针(类似输出流运算符返回流对象引用一样)，所以还可以继续使用FirstChildElement获取接下来的孩子节点。</p>
+<p>然后获取节点的文本信息，使用函数GetText，函数原型：</p>
+<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">const char* XMLElement::GetText() const
+&#123;
+    if ( FirstChild() &amp;&amp; FirstChild()-&gt;ToText() ) &#123;
+        return FirstChild()-&gt;Value();
+    &#125;
+    return 0;
+&#125;</code></pre>
+
+<p>从GetText函数可以看出，可以使用FirstChild()-&gt;Value()带她GetText函数使用，获取文本信息，也就是<title>xxxxx</title> 之间的xxxx信息。返回值是const char *。。。。</p>
+<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">const char* XMLNode::Value() const
+&#123;
+    if ( this-&gt;ToDocument() )
+        return 0;
+    return _value.GetStr();</code></pre>
+
+<p>使用NextSiblingElement函数获取兄弟节点，完成下一个节点信息的遍历。。。</p>
+<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">const XMLElement* NextSiblingElement( const char* name &#x3D; 0 ) const;
+const XMLElement* XMLNode::NextSiblingElement( const char* name ) const
+&#123;
+    for( const XMLNode* node &#x3D; _next; node; node &#x3D; node-&gt;_next ) &#123;
+        const XMLElement* element &#x3D; node-&gt;ToElementWithName( name );
+        if ( element ) &#123;
+            return element;
+        &#125;
+    &#125;
+    return 0;
+&#125;
+
+XMLElement* NextSiblingElement( const char* name &#x3D; 0 )  &#123;
+    return const_cast&lt;XMLElement*&gt;(const_cast&lt;const XMLNode*&gt;(this)-&gt;NextSiblingElement( name ) );
+    &#125;</code></pre>
+
+<p>上面的这几个函数就可以完成xml文件的解析工作，是不是很简单。。。。</p>
+<p>因为解析之后的信息包含html的标签，所以需要去除(不可能在去遍历，然后与到<p> <li>这些进行去除)，直接使用正则表达式即可。。。。</p>
+<p>正则表达式：#include <regex>  <a target="_blank" rel="noopener" href="http://www.cppreference.com网站进行查找即可.../">www.cppreference.com网站进行查找即可。。。</a></p>
+<p>regex_replace() ：用格式化的替换文本替换出现的正则表达式</p>
+<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">template&lt; class Traits, class CharT, class STraits, class SAlloc, class FTraits, 
+          class FAlloc &gt;
+ std::basic_string&lt;CharT,STraits,SAlloc&gt; 
+ regex_replace(const std::basic_string&lt;CharT,STraits,SAlloc&gt;&amp; s,
+               const std::basic_regex&lt;CharT,Traits&gt;&amp; re,
+               const std::basic_string&lt;CharT,FTraits,FAlloc&gt;&amp; fmt,
+               std::regex_constants::match_flag_type flags &#x3D;
+               std::regex_constants::match_default )</code></pre>
+
+<p>basic_regex，正则表达式对象(可以使用正则表达式去除html标签)</p>
+<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">explicit basic_regex( const CharT* s,flag_type f &#x3D; std::regex_constants::ECMAScript)</code></pre>
+
+<p>去除所有的html标签：<code>“&lt;[^&gt;]+&gt;”</code>     <code>&lt;.*?&gt;</code></p>
+<p>拼接xml文件使用的相关函数。就是将节点拼接起来，相应的过程与解析过程是反的。</p>
+<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">XMLNode* InsertEndChild( XMLNode* addThis );
+XMLNode* XMLNode::InsertEndChild( XMLNode* addThis )
+&#123;
+    TIXMLASSERT( addThis );
+    if ( addThis-&gt;_document !&#x3D; _document ) &#123;
+        TIXMLASSERT( false );
+        return 0;
+    &#125;
+    InsertChildPreamble( addThis );
+
+    if ( _lastChild ) &#123;
+        TIXMLASSERT( _firstChild );
+        TIXMLASSERT( _lastChild-&gt;_next &#x3D;&#x3D; 0 );
+        _lastChild-&gt;_next &#x3D; addThis;
+        addThis-&gt;_prev &#x3D; _lastChild;
+        _lastChild &#x3D; addThis;
+
+        addThis-&gt;_next &#x3D; 0;
+    &#125;
+    else &#123;
+        TIXMLASSERT( _firstChild &#x3D;&#x3D; 0 );
+        _firstChild &#x3D; _lastChild &#x3D; addThis;
+
+        addThis-&gt;_prev &#x3D; 0;
+        addThis-&gt;_next &#x3D; 0;
+    &#125;
+    addThis-&gt;_parent &#x3D; this;
+    return addThis;
+&#125;
+XMLNode* InsertFirstChild( XMLNode* addThis );
+XMLNode* InsertAfterChild( XMLNode* afterThis, XMLNode* addThis );
+XMLNode* LinkEndChild( XMLNode* addThis )   &#123;
+    return InsertEndChild( addThis );
+&#125;</code></pre>
+
+
+
+<p>//创建一个XML的文档对象。<br>XmlDocument *myDocument = new XmlDocument();</p>
+<p>//创建一个根元素并连接。<br>XmlElement *RootElement = new XmlElement(“Persons”);<br>myDocument-&gt;LinkEndChild(RootElement);</p>
+<p>//创建一个Person元素并连接。<br>XmlElement *PersonElement = new XmlElement(“Person”);<br>RootElement-&gt;LinkEndChild(PersonElement);</p>
+<p>//设置Person元素的属性。<br>PersonElement-&gt;SetAttribute(“ID”, “1”);<br>//创建name元素、age元素并连接。<br>XmlElement *NameElement = new XmlElement(“name”);<br>XmlElement *AgeElement = new XmlElement(“age”);<br>PersonElement-&gt;LinkEndChild(NameElement);<br>PersonElement-&gt;LinkEndChild(AgeElement);</p>
+<p>//设置name元素和age元素的内容并连接。<br>XmlText *NameContent = new XmlText(“周星星”);<br>XmlText *AgeContent = new XmlText(“20”);<br>NameElement-&gt;LinkEndChild(NameContent);<br>AgeElement-&gt;LinkEndChild(AgeContent);</p>
+<p>//保存到文件<br>myDocument-&gt;SaveFile(“要保存的xml文件名”);</p>
+<p>这样，便创建了一个如下的xml文件：<br>    <Persons><br>        <Person ID="1"><br>            <name>周</name><br>            <age>20</age><br>        </Person><br>    </Persons></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/tinyXML2/" rel="tag"><i class="fa fa-tag"></i> tinyXML2</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/04/11/VIM-Plug%E5%AE%89%E8%A3%85%E6%8F%92%E4%BB%B6%E6%97%B6%EF%BC%8C%E9%A2%91%E7%B9%81%E6%9B%B4%E6%96%B0%E5%A4%B1%E8%B4%A5%EF%BC%8C%E6%88%96%E6%8A%A5%E7%AB%AF%E5%8F%A3443%E8%A2%AB%E6%8B%92%E7%BB%9D%E7%AD%89/" rel="prev" title="VIM-Plug安装插件时，频繁更新失败，或报端口443被拒绝等">
+                  <i class="fa fa-chevron-left"></i> VIM-Plug安装插件时，频繁更新失败，或报端口443被拒绝等
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/04/13/C++%E4%B9%8Bregex/" rel="next" title="C++之Regex">
+                  C++之Regex <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wbahh</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/components/prism-core.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/autoloader/prism-autoloader.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

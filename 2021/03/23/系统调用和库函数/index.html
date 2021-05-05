@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"wbahh.com","root":"/","images":"/images","scheme":"Gemini","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":true,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
+  </script>
+<meta name="description" content="库函数是语言本身的一部分，而系统函数是内核提供给应用程序的接口，属于系统的一部分。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="系统调用和库函数">
+<meta property="og:url" content="http://wbahh.com/2021/03/23/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%92%8C%E5%BA%93%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:site_name" content="wbahh">
+<meta property="og:description" content="库函数是语言本身的一部分，而系统函数是内核提供给应用程序的接口，属于系统的一部分。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-03-23T01:13:29.000Z">
+<meta property="article:modified_time" content="2021-03-23T01:18:05.000Z">
+<meta property="article:author" content="wbahh">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://wbahh.com/2021/03/23/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%92%8C%E5%BA%93%E5%87%BD%E6%95%B0/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+<title>系统调用和库函数 | wbahh</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">wbahh</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">个人博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">22</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">15</span></a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%BA%93%E8%B0%83%E7%94%A8-VS-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">函数库调用 VS 系统调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%92%8C%E5%87%BD%E6%95%B0%E5%BA%93%E7%9A%84%E5%85%B3%E7%B3%BB%EF%BC%9A"><span class="nav-number">2.</span> <span class="nav-text">系统调用和函数库的关系：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E7%94%A8%E6%88%B7%E8%B0%83%E7%94%A8%E5%BA%93%E5%87%BD%E6%95%B0%E5%88%B0%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E6%89%A7%E8%A1%8C%E7%9A%84%E6%B5%81%E7%A8%8B%E3%80%82"><span class="nav-number">3.</span> <span class="nav-text">从用户调用库函数到系统调用执行的流程。</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="wbahh"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">wbahh</p>
+  <div class="site-description" itemprop="description">欢喜也只得中庸</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button site-overview-item animated"><i class="fa fa-comment"></i>
+    Chat
+  </a>
+  </div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wbahh" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wbahh" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wangyutong551@yeah.net" title="E-Mail → mailto:wangyutong551@yeah.net" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://wbahh.com/2021/03/23/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%92%8C%E5%BA%93%E5%87%BD%E6%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="wbahh">
+      <meta itemprop="description" content="欢喜也只得中庸">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wbahh">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          系统调用和库函数
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2021-03-23 09:13:29 / 修改时间：09:18:05" itemprop="dateCreated datePublished" datetime="2021-03-23T09:13:29+08:00">2021-03-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/linux/Linux%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">Linux基础</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>库函数是语言本身的一部分，而系统函数是内核提供给应用程序的接口，属于系统的一部分。</p>
+<span id="more"></span>
+
+
+<p> 　　函数库调用是语言或应用程序的一部分，而系统调用是操作系统的一部分。你要确保弄懂“trap（自陷）”这个关键字的含义。系统调用是在操作系统内核发现一个“trap”或中断后进行的（其中系统调用是软中断）。</p>
+<h3 id="函数库调用-VS-系统调用"><a href="#函数库调用-VS-系统调用" class="headerlink" title="函数库调用 VS 系统调用"></a>函数库调用 VS 系统调用</h3><table>
+<thead>
+<tr>
+<th>函数库调用</th>
+<th>系统调用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>在所有的ANSI C编译器版本中，C库函数是相同的</td>
+<td>各个操作系统的系统调用是不同的</td>
+</tr>
+<tr>
+<td>它调用函数库中的一段程序（或函数）</td>
+<td>它调用系统内核的服务</td>
+</tr>
+<tr>
+<td>与用户程序相联系</td>
+<td>是操作系统的一个入口点</td>
+</tr>
+<tr>
+<td>在用户地址空间执行</td>
+<td>在内核地址空间执行</td>
+</tr>
+<tr>
+<td>它的运行时间属于“用户时间”</td>
+<td>它的运行时间属于“系统”时间</td>
+</tr>
+<tr>
+<td>属于过程调用，调用开销较小</td>
+<td>需要在用户空间和内核上下文环境间切换，开销较大</td>
+</tr>
+<tr>
+<td>在C函数库libc中有大约300个函数</td>
+<td>在UNIX中大约有90个系统调用</td>
+</tr>
+<tr>
+<td>典型的C函数库调用：system  fprintf  malloc</td>
+<td>典型的系统调用：chdir  fork  write  brk；</td>
+</tr>
+</tbody></table>
+<p> 　　库函数调用通常比行内展开的代码慢，因为它需要付出函数调用的开销。但系统调用比库函数调用还要慢很多，因为它需要把上下文环境切换到内核模式。</p>
+<p>​     </p>
+<h3 id="系统调用和函数库的关系："><a href="#系统调用和函数库的关系：" class="headerlink" title="系统调用和函数库的关系："></a>系统调用和函数库的关系：</h3><p> ◆ 系统调用通过软中断int 0x80从用户态进入内核态。</p>
+<p> ◆ 函数库中的某些函数调用了系统调用。</p>
+<p> ◆ 函数库中的函数可以没有调用系统调用，也可以调用多个系统调用。</p>
+<p> ◆ 编程人员可以通过函数库调用系统调用。</p>
+<p> ◆ 高级编程也可以直接采用int 0x80进入系统调用，而不必通过函数库作为中介。</p>
+<p> ◆ 如果是在核心编程，也可以通过int 0x80进入系统调用，此时不能使用函数库。因为函数库中的函数是内核访问不到的。</p>
+<p> 　　</p>
+<h3 id="从用户调用库函数到系统调用执行的流程。"><a href="#从用户调用库函数到系统调用执行的流程。" class="headerlink" title="从用户调用库函数到系统调用执行的流程。"></a>从用户调用库函数到系统调用执行的流程。</h3><ol>
+<li><p>假设用户调用ssize_t write (int fields, cont void *buff, size_t nbytes);库函数。</p>
+</li>
+<li><p>库函数会执行int 0x80中断。因为中断使得进程从用户态进入内核态，所以参数通过寄存器传送。</p>
+</li>
+<li><p>0x80中断对应的中断例程被称为system call handler。其工作是：</p>
+</li>
+</ol>
+<p> i.存储大多数寄存器到内核堆栈中。这是汇编代码写的。</p>
+<p> ii.执行真正的系统调用函数――system call service routine。这是C代码。</p>
+<p> iii.通过ret_from_sys_call ()返回，回到用户态的库函数。这是汇编代码。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"><i class="fa fa-tag"></i> linux</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/03/15/vim%E5%A4%8D%E5%88%B6%EF%BC%8C%E7%B2%98%E8%B4%B4%EF%BC%8C%E5%89%AA%E8%B4%B4/" rel="prev" title="vim复制，粘贴，剪贴">
+                  <i class="fa fa-chevron-left"></i> vim复制，粘贴，剪贴
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/03/23/Net-disk/" rel="next" title="Net-disk">
+                  Net-disk <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wbahh</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/components/prism-core.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/autoloader/prism-autoloader.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"wbahh.com","root":"/","images":"/images","scheme":"Gemini","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":true,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
+  </script>
+<meta name="description" content="关于log4cpp数据库使用操作相关。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="log4cpp使用总结">
+<meta property="og:url" content="http://wbahh.com/2021/04/13/log4cpp%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="wbahh">
+<meta property="og:description" content="关于log4cpp数据库使用操作相关。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-13T03:32:51.000Z">
+<meta property="article:modified_time" content="2021-04-25T15:59:55.000Z">
+<meta property="article:author" content="wbahh">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="log4Cpp">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://wbahh.com/2021/04/13/log4cpp%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+<title>log4cpp使用总结 | wbahh</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">wbahh</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">个人博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">22</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">15</span></a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#log4cpp%E5%A4%B4%E6%96%87%E4%BB%B6"><span class="nav-number">1.</span> <span class="nav-text">log4cpp头文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Layout%EF%BC%9A%E5%B8%83%E5%B1%80%EF%BC%8C%E8%B4%9F%E8%B4%A3%E8%AE%BE%E5%AE%9A%E6%97%A5%E5%BF%97%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">1.Layout：布局，负责设定日志格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Appender-%E9%99%84%E5%8A%A0%E7%9B%AE%E7%9A%84%E5%9C%B0%EF%BC%8C%E8%B4%9F%E8%B4%A3%E6%8C%87%E5%AE%9A%E6%97%A5%E5%BF%97%E7%9A%84%E7%9B%AE%E7%9A%84%E5%9C%B0"><span class="nav-number">1.2.</span> <span class="nav-text">2.Appender:附加目的地，负责指定日志的目的地</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-1OstreamAppender-%E8%BE%93%E5%87%BA%E5%88%B0%E4%B8%80%E4%B8%AA-ostream-%E7%B1%BB"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1OstreamAppender&#x2F;&#x2F;输出到一个 ostream 类</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3FileAppender-%E8%BE%93%E5%87%BA%E5%88%B0%E7%9B%AE%E6%A0%87%E6%96%87%E4%BB%B6"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.3FileAppender&#x2F;&#x2F;输出到目标文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-4RollingFileAppender-%E6%BB%9A%E5%8A%A8%E5%BC%8F%E8%BE%93%E5%87%BA"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.4RollingFileAppender&#x2F;&#x2F;滚动式输出</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Category-%E7%A7%8D%E7%B1%BB%EF%BC%8C%E8%B4%9F%E8%B4%A3%E5%90%91%E6%97%A5%E5%BF%97%E4%B8%AD%E5%86%99%E5%85%A5%E4%BF%A1%E6%81%AF"><span class="nav-number">1.3.</span> <span class="nav-text">3.Category:种类，负责向日志中写入信息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-Priority-%E4%BC%98%E5%85%88%E7%BA%A7%EF%BC%8C%E7%94%A8%E6%9D%A5%E6%8C%87%E5%AE%9A-Category-%E4%BC%98%E5%85%88%E7%BA%A7%E5%92%8C%E6%97%A5%E5%BF%97%E4%BC%98%E5%85%88%E7%BA%A7"><span class="nav-number">1.4.</span> <span class="nav-text">4.Priority:优先级，用来指定 Category 优先级和日志优先级</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Log4cpp%E8%AE%B0%E5%BD%95%E6%97%A5%E5%BF%97%E7%9A%84%E5%8E%9F%E7%90%86"><span class="nav-number">1.4.1.</span> <span class="nav-text">Log4cpp记录日志的原理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Log4cpp-%E7%9A%84%E8%87%AA%E5%8A%A8%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="nav-number">1.4.2.</span> <span class="nav-text">Log4cpp 的自动内存管理</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-log4cpp%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.5.</span> <span class="nav-text">4.log4cpp使用示例</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="wbahh"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">wbahh</p>
+  <div class="site-description" itemprop="description">欢喜也只得中庸</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button site-overview-item animated"><i class="fa fa-comment"></i>
+    Chat
+  </a>
+  </div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wbahh" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wbahh" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wangyutong551@yeah.net" title="E-Mail → mailto:wangyutong551@yeah.net" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://wbahh.com/2021/04/13/log4cpp%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="wbahh">
+      <meta itemprop="description" content="欢喜也只得中庸">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wbahh">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          log4cpp使用总结
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-04-13 11:32:51" itemprop="dateCreated datePublished" datetime="2021-04-13T11:32:51+08:00">2021-04-13</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-04-25 23:59:55" itemprop="dateModified" datetime="2021-04-25T23:59:55+08:00">2021-04-25</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/C/log4Cpp/" itemprop="url" rel="index"><span itemprop="name">log4Cpp</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>关于log4cpp数据库使用操作相关。</p>
+<span id="more"></span>
+
+<h3 id="log4cpp头文件"><a href="#log4cpp头文件" class="headerlink" title="log4cpp头文件"></a>log4cpp头文件</h3><p>#include &lt;log4cpp/BasicLayout.hh&gt;</p>
+<p>#include &lt;log4cpp/SimpleLayout.hh&gt;</p>
+<p>#include &lt;log4cpp/PatternLayout.hh&gt;</p>
+<p>#include &lt;log4cpp/Appender.hh&gt;</p>
+<p>#include &lt;log4cpp/OstreamAppender.hh&gt;</p>
+<p>#include &lt;log4cpp/StringQueueAppender.hh&gt;</p>
+<p>#include &lt;log4cpp/FileAppender.hh&gt;</p>
+<p>#include &lt;log4cpp/RollingFileAppender.hh&gt;</p>
+<p>#include &lt;log4cpp/Priority.hh&gt;</p>
+<p>#include &lt;log4cpp/Category.hh&gt;</p>
+<p>using namespace log4cpp;</p>
+<h4 id="1-Layout：布局，负责设定日志格式"><a href="#1-Layout：布局，负责设定日志格式" class="headerlink" title="1.Layout：布局，负责设定日志格式"></a>1.Layout：布局，负责设定日志格式</h4><p>前两个布局使用的少，一般推荐使用PatterLayout,<code>使用类似printf的格式化模式</code></p>
+<p>构造函数：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">log4cpp::PatternLayout::PatternLayout()
+PatternLayout设置日志格式函数
+void log4cpp::PatternLayout::setConversionPattern(const std::string &amp;conversionPattern) throw
+(ConfigureFailure)
+使用 PatterLayout 时的格式化参数：
+u %c category；
+u %d 日期；日期可以进一步的设置格式，用花括号包围，例如%d&#123;%H:%M:%S,%l&#125; 或者 %d&#123;%d %m
+%Y%H:%M:%S,%l&#125;。如果不设置具体日期格式，则如下默认格式被使用“Wed Jan 02 02:03:55 1980”。
+日期的格式符号与 ANSI C 函数 strftime 中的一致。但增加了一个格式符号%l，表示毫秒，占三个十进
+制位。
+u %m 消息；
+u %n 换行符，会根据平台的不同而不同，但对于用户透明；
+u %p 优先级；
+u %r 自从 layout 被创建后的毫秒数；
+u %R 从 1970 年 1 月 1 日 0 时开始到目前为止的秒数；
+u %u 进程开始到目前为止的时钟周期数；
+u %x NDC。
+举例：
+log4cpp::PatternLayout* pLayout &#x3D; new log4cpp::PatternLayout();
+pLayout-&gt;setConversionPattern(&quot;%d: [%p] %c %x: %m%n&quot;);</code></pre>
+
+<h4 id="2-Appender-附加目的地，负责指定日志的目的地"><a href="#2-Appender-附加目的地，负责指定日志的目的地" class="headerlink" title="2.Appender:附加目的地，负责指定日志的目的地"></a>2.Appender:附加目的地，负责指定日志的目的地</h4><h5 id="2-1OstreamAppender-输出到一个-ostream-类"><a href="#2-1OstreamAppender-输出到一个-ostream-类" class="headerlink" title="2.1OstreamAppender//输出到一个 ostream 类"></a>2.1OstreamAppender//输出到一个 ostream 类</h5><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">构造函数：
+log4cpp::OstreamAppender::OstreamAppender(const std::string &amp;name,
+std::ostream stream)
+参数：
+name the name of the Appender. &#x3D;&#x3D;&#x3D;&gt;名称
+stream the name of the ostream.&#x3D;&#x3D;&#x3D;&gt;流名字
+例子：
+log4cpp::OstreamAppender osAppender &#x3D; new log4cpp::OstreamAppender(&quot;osAppender&quot;,
+&amp;cout);</code></pre>
+
+<p>#####2.2StringQueueAppender//内存队列</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">构造函数：
+log4cpp::StringQueueAppender::StringQueueAppender(const std::string &amp;name)
+参数：类似上述
+举例：
+log4cpp::StringQueueAppender* strQAppender &#x3D;
+newlog4cpp::StringQueueAppender(&quot;strQAppender&quot;);
+最常用的两个 FileAppender，其功能是将日志写入文件中
+FileAppender &#x2F;&#x2F; 输出到文件</code></pre>
+
+<h5 id="2-3FileAppender-输出到目标文件"><a href="#2-3FileAppender-输出到目标文件" class="headerlink" title="2.3FileAppender//输出到目标文件"></a>2.3FileAppender//输出到目标文件</h5><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">构造函数
+log4cpp::FileAppender::FileAppender (const std::string &amp;name,
+const std::string &amp;fileName,
+bool append &#x3D; true,
+mode_t mode &#x3D; 00644)
+参数：
+name the name of the Appender. &#x3D;&#x3D;&#x3D;&gt;名称
+fileName the name of the file to which the Appender has to log.&#x3D;&#x3D;&#x3D;&gt;日志文件名
+append whether the Appender has to truncate the file or just append to it if it
+already exists. Defaults to &#39;true&#39;.(&#x3D;&#x3D;&#x3D;&gt;是否在日志文件后继续记入日志，还是清空原
+日志文件再记录)
+mode file mode to open the logfile with. Defaults to 00644.
+&#x3D;&#x3D;&#x3D;&gt;文件的打开方式
+举例：
+log4cpp::FileAppender* fileAppender &#x3D;
+newlog4cpp::FileAppender(&quot;fileAppender&quot;,&quot;wxb.log&quot;);
+fileAppender-&gt;setLayout(pLayout1);</code></pre>
+
+<h5 id="2-4RollingFileAppender-滚动式输出"><a href="#2-4RollingFileAppender-滚动式输出" class="headerlink" title="2.4RollingFileAppender//滚动式输出"></a>2.4RollingFileAppender//滚动式输出</h5><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">构造函数
+log4cpp::RollingFileAppender::RollingFileAppender(const std::string &amp;name,
+const std::string &amp;fileName,
+size_t maxFileSize &#x3D; 10 *1024 *1024,
+unsigned int maxBackupIndex &#x3D; 1,
+bool append &#x3D; true,
+mode_t mode &#x3D; 00644)
+参数：
+前两个参数与普通文件的类似
+第三个参数 maxFileSize：指出了回滚文件的最大值
+第四个参数 maxBackupIndex：指出了回滚文件所用的备份文件的最大个数。所谓备份文件，
+是用来保存回滚文件中因为空间不足未能记录的日志，备份文件的大小仅比回滚文件的最大
+值大 1kb。所以如果 maxBackupIndex 取值为 3，则回滚文件(假设其名称是 rollwxb.log，
+大小为 100kb)会有三个备份文件，其名称分别是 rollwxb.log.1，rollwxb.log.2 和
+rollwxb.log.3，大小为 101kb。另外要注意：如果 maxBackupIndex 取值为 0 或者小于 0，
+则回滚文件功能会失效，其表现如同 FileAppender 一样，不会有大小的限制。这也许是一
+个 bug。
+第五第六参数同上。
+举例：
+log4cpp::RollingFileAppender* rollfileAppender &#x3D;
+newlog4cpp::RollingFileAppender( &quot;rollfileAppender&quot;,&quot;rollwxb.log&quot;,5*1024,1);
+rollfileAppender-&gt;setLayout(pLayout2)</code></pre>
+
+<h4 id="3-Category-种类，负责向日志中写入信息"><a href="#3-Category-种类，负责向日志中写入信息" class="headerlink" title="3.Category:种类，负责向日志中写入信息"></a>3.Category:种类，负责向日志中写入信息</h4><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">构造函数：
+Log4cpp 中有一个总是可用并实例化好的 Category，即根 Category。使用
+log4cpp::Category::getRoot()可以得到根 Category。
+在大多数情况下，一个应用程序只需要一个日志种类(Category)，但是有时也会用到多个
+Category，此时可以使用根 Category 的 getInstance 方法来得到子 Category。不同的子
+Category 用于不同的场合。
+log4cpp::Category&amp; root &#x3D;log4cpp::Category::getRoot();
+log4cpp::Category&amp; infoCategory &#x3D;root.getInstance(&quot;infoCategory&quot;);
+infoCategory.addAppender(osAppender);
+infoCategory.setPriority(log4cpp::Priority::INFO);
+主要的成员函数：
+1、设置 category 的级别
+void log4cpp::Category::setPriority (Priority::Value priority) throw
+(std::invalid_argument)
+Set the priority of this Category.Parameters:
+priority The priority to set. Use Priority::NOTSET to let the category use its
+parents priority as effective priority.
+2、设置或添加 appender
+void log4cpp::Category::addAppender (Appender *appender ) throw
+(std::invalid_argument) [virtual]
+Adds an Appender to this Category.
+This method passes ownership from the caller to the Category.
+void log4cpp::Category::setAppender (Appender *appender ) [inline]
+Adds an Appender to this Category.
+This method passes ownership from the caller to the Category.
+3、相应日志级别的记录
+（emerg&#x2F;fatal&#x2F;alter&#x2F;crit&#x2F;error&#x2F;warn&#x2F;notice&#x2F;info&#x2F;debug&#x2F;notset）
+warn
+void log4cpp::Category::warn(const std::string &amp;message) throw ()
+Log a message with warn priority.
+Parameters:
+message string to write in the log file
+void log4cpp::Category::warn(const char * stringFormat,... ) throw ()
+Log a message with warn priority.
+Parameters:
+stringFormat Format specifier for the string to write in the log file.
+void log4cpp::Category::error(const std::string &amp;message) throw ()
+Log a message with error priority.
+Parameters:
+message string to write in the log file
+void log4cpp::Category::error(const char *stringFormat,... ) throw ()
+Log a message with error priority.
+Parameters:
+stringFormat Format specifier for the string to write in the log file.</code></pre>
+
+<h4 id="4-Priority-优先级，用来指定-Category-优先级和日志优先级"><a href="#4-Priority-优先级，用来指定-Category-优先级和日志优先级" class="headerlink" title="4.Priority:优先级，用来指定 Category 优先级和日志优先级"></a>4.Priority:优先级，用来指定 Category 优先级和日志优先级</h4><h5 id="Log4cpp记录日志的原理"><a href="#Log4cpp记录日志的原理" class="headerlink" title="Log4cpp记录日志的原理"></a>Log4cpp记录日志的原理</h5><p>每个Category都有一个优先级，该优先级可以由setPriority方法设置，或者从其父 Category 中继承而来。每条日志也有一个优先级，当 Category 记录该条日志时，若日志优先级高于 Category 的优先级时，该日志被记录，否则被忽略。系统中默认的优先级等级如下：<br>typedef enum{EMERG=0,FATAL=0,ALERT=100,CRIT=200,ERROR=300,WARN=400,NOTICE=500,INFO=600,<br>DEBUG=700,NOTSET =800} PriorityLevel;<br>注意：取值越小，优先级越高。例如一个 Category 的优先级为 101，则所有 EMERG、FATAL、ALERT 日志都可以记录下来，而其他则不能。</p>
+<h5 id="Log4cpp-的自动内存管理"><a href="#Log4cpp-的自动内存管理" class="headerlink" title="Log4cpp 的自动内存管理"></a>Log4cpp 的自动内存管理</h5><p>Log4cpp 中 new 出来的 Category、Appender 和 Layout 都不需要手动释放，因为 Log4cpp 使用了一个内部类来管理这些对象。此类的名称是 HierarchyMaintainer，它负责管理 Category 的继承关系，在程序结束时，HierarchyMaintainer 会依次释放所有 Category，而 Category 则会依次释放拥有的有效 Appender，Appender 则会释放所有附属的 Layout。如果程序员手动释放这些对象，则会造成内存报错。</p>
+<p>从下面的代码可以看出这个特征：appender-&gt;setLayout(newlog4cpp::BasicLayout());这个 new 出来的 BasicLayout 根本就没有保存其指针，所以它只能被 log4cpp 的内存管理类HierarchyMaintainer 释放。</p>
+<p>在使用 log4cpp时应该遵循以下几个使用原则：<br>1)不要手动释放 Category、Appender 和 Layout;<br>2)同一个 Appender 不要加入多个 Category，否则它会被释放多次从而导致程序崩溃;<br>3)同一个 Layout 不要附着到多个 Appender 上，否则也会被释放多次导致程序崩溃;<br>log4cpp::Category::shutdown()在不使用 log4cpp 时可调用 log4cpp::Category::shutdown()，其功能如同<br>HierarchyMaintainer 的内存清理。但如果不手动调用，在程序结束时 HierarchyMaintainer 会调用 Category 的析构函数来释放所有 Appender。</p>
+<h4 id="4-log4cpp使用示例"><a href="#4-log4cpp使用示例" class="headerlink" title="4.log4cpp使用示例"></a>4.log4cpp使用示例</h4><p><code>MyLogger.h</code></p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">#ifndef __MY_LOGGER_H__
+#define __MY_LOGGER_H__
+#include &lt;log4cpp&#x2F;Category.hh&gt;
+
+using namespace log4cpp;
+
+class Mylogger &#123;
+public:
+    static Mylogger *getInstance();
+    static void destroy();
+    void warn(const char * msg);
+    void error(const char * msg);
+    void debug(const char * msg);
+    void info(const char * msg);
+
+private:
+    Mylogger();
+    ~Mylogger();
+private:
+    static Mylogger *_pInstance;
+    Category &amp;_root;
+&#125;;
+&#x2F;&#x2F;自定义宏来完成获取当前行的文件名，函数名和所在行
+#define prefic(msg) string(__FILE__).append(&quot; &quot;).append(__FUNCTION__) \
+                    .append(&quot; &quot;).append(std::to_string(__LINE__))\
+                    .append(&quot;:&quot;).append(msg).c_str()
+
+#define logError(msg) Mylogger::getInstance()-&gt;error(prefic(msg))
+#define logInfo(msg) Mylogger::getInstance()-&gt;Info(prefic(msg))
+#define logDebug(msg) Mylogger::getInstance()-&gt;debug(prefic(msg))
+#define logWarn(msg) Mylogger::getInstance()-&gt;warn(prefic(msg))
+#endif</code></pre>
+
+<p><code>MyLogger.cpp</code></p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">#include &quot;MyLogger.h&quot;
+#include &lt;log4cpp&#x2F;PatternLayout.hh&gt;
+#include &lt;log4cpp&#x2F;OstreamAppender.hh&gt;
+#include &lt;log4cpp&#x2F;FileAppender.hh&gt;
+#include &lt;log4cpp&#x2F;Priority.hh&gt;
+
+#include &lt;iostream&gt;
+
+using std::cout;
+using std::endl;
+
+Mylogger *Mylogger::_pInstance &#x3D; nullptr;
+
+Mylogger *Mylogger::getInstance() &#123;
+    if(nullptr &#x3D;&#x3D; _pInstance) &#123;
+        _pInstance &#x3D; new Mylogger();
+    &#125;
+
+    return _pInstance;
+&#125;
+
+void Mylogger::destroy() &#123;
+    if(_pInstance) &#123;
+        delete _pInstance;
+        _pInstance &#x3D; nullptr;
+    &#125;
+&#125;
+void Mylogger::warn(const char * msg) &#123;
+    _root.warn(msg);
+&#125;
+void Mylogger::error(const char * msg) &#123;
+    _root.error(msg);
+&#125;
+void Mylogger::debug(const char * msg) &#123;
+    _root.debug(msg);
+&#125;
+void Mylogger::info(const char * msg) &#123;
+    _root.info(msg);
+&#125;
+
+Mylogger::Mylogger()
+: _root(Category::getRoot().getInstance(&quot;Mycat&quot;))
+&#123;
+    cout &lt;&lt; &quot;Mylogger()&quot; &lt;&lt; endl;
+
+    &#x2F;&#x2F;日志的格式
+    PatternLayout *ppl1 &#x3D; new PatternLayout();
+    ppl1-&gt;setConversionPattern(&quot;%d %c [%p] %m%n&quot;);
+
+    PatternLayout *ppl2 &#x3D; new PatternLayout();
+    ppl2-&gt;setConversionPattern(&quot;%d %c [%p] %m%n&quot;);
+
+    &#x2F;&#x2F;日志的目的地
+    OstreamAppender *poa &#x3D; new OstreamAppender(&quot;OstreamAppender&quot;, &amp;cout);
+    poa-&gt;setLayout(ppl1);
+
+    FileAppender *pfa &#x3D; new FileAppender(&quot;FileAppender&quot;, &quot;wd.log&quot;);
+    pfa-&gt;setLayout(ppl2);
+
+    _root.addAppender(poa);
+    _root.addAppender(pfa);
+    _root.setPriority(Priority::DEBUG);
+&#125;
+
+Mylogger::~Mylogger() &#123;
+    cout &lt;&lt; &quot;~Mylogger()&quot; &lt;&lt; endl;
+    Category::shutdown();
+&#125;</code></pre>
+
+<p><code>test.cpp</code></p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">#include &quot;MyLogger.h&quot;
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+using std::cout;
+using std::endl;
+using std::string;
+
+string func(const char *msg) &#123;
+    string s1 &#x3D; string(__FILE__) +  string(&quot;  &quot;)
+                + string(__FUNCTION__) + string(&quot;  &quot;)
+                + string(std::to_string(__LINE__)) + msg;
+
+    return s1;
+&#125;
+
+void test() &#123;
+    &#x2F;* Mylogger::getInstance()-&gt;error(&quot;This is an error message&quot;); *&#x2F;
+    &#x2F;* Mylogger::getInstance()-&gt;error(func(&quot;This is an error message&quot;).c_str()); *&#x2F;
+    &#x2F;* Mylogger::getInstance()-&gt;error(prefic(&quot;This is an error message&quot;)); *&#x2F;
+    &#x2F;* Mylogger::getInstance()-&gt;info(prefic(&quot;This is an info message&quot;)); *&#x2F;
+    &#x2F;* Mylogger::getInstance()-&gt;debug(prefic(&quot;This is an debug message&quot;)); *&#x2F;
+    logError(&quot;This is an error message&quot;) ;
+&#125;
+
+void test2() &#123;
+    cout &lt;&lt; __FILE__ &lt;&lt; &quot;    &quot; &lt;&lt;  __FUNCTION__ 
+         &lt;&lt; &quot;   &quot;   &lt;&lt;  __LINE__ &lt;&lt; endl;
+&#125;
+
+int main(int argc, char **argv) &#123;
+    test();
+    return 0;
+&#125;</code></pre>
+
+
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/log4Cpp/" rel="tag"><i class="fa fa-tag"></i> log4Cpp</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/04/13/C++%E4%B9%8Bregex/" rel="prev" title="C++之Regex">
+                  <i class="fa fa-chevron-left"></i> C++之Regex
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/04/13/C++%E6%8E%A8%E8%8D%90%E6%96%87%E7%AB%A0/" rel="next" title="C++推荐文章">
+                  C++推荐文章 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wbahh</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/components/prism-core.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/autoloader/prism-autoloader.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
