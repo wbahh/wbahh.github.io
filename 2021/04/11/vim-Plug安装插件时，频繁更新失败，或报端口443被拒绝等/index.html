@@ -23,20 +23,21 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"wbahh.com","root":"/","images":"/images","scheme":"Gemini","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":true,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
   </script>
-<meta name="description" content="欢喜也只得中庸">
-<meta property="og:type" content="website">
-<meta property="og:title" content="标签">
-<meta property="og:url" content="http://wbahh.com/tags/index.html">
+<meta name="description" content="因为中国地区访问像 github 这种国外网站很不稳定, 所以在一般都是采用镜像网站的方式间接访问. 而 vim-plug 下载时都是用的实际网站, 我们可以修改 plug.vim 来将实际网站变为镜像网站, 提高下载成功率.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VIM-Plug安装插件时，频繁更新失败，或报端口443被拒绝等">
+<meta property="og:url" content="http://wbahh.com/2021/04/11/vim-Plug%E5%AE%89%E8%A3%85%E6%8F%92%E4%BB%B6%E6%97%B6%EF%BC%8C%E9%A2%91%E7%B9%81%E6%9B%B4%E6%96%B0%E5%A4%B1%E8%B4%A5%EF%BC%8C%E6%88%96%E6%8A%A5%E7%AB%AF%E5%8F%A3443%E8%A2%AB%E6%8B%92%E7%BB%9D%E7%AD%89/index.html">
 <meta property="og:site_name" content="wbahh">
-<meta property="og:description" content="欢喜也只得中庸">
+<meta property="og:description" content="因为中国地区访问像 github 这种国外网站很不稳定, 所以在一般都是采用镜像网站的方式间接访问. 而 vim-plug 下载时都是用的实际网站, 我们可以修改 plug.vim 来将实际网站变为镜像网站, 提高下载成功率.">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-03-10T15:21:23.000Z">
-<meta property="article:modified_time" content="2021-03-10T15:21:55.000Z">
+<meta property="article:published_time" content="2021-04-11T15:53:33.000Z">
+<meta property="article:modified_time" content="2021-04-11T15:58:56.000Z">
 <meta property="article:author" content="wbahh">
+<meta property="article:tag" content="vimplus">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://wbahh.com/tags/">
+<link rel="canonical" href="http://wbahh.com/2021/04/11/vim-Plug%E5%AE%89%E8%A3%85%E6%8F%92%E4%BB%B6%E6%97%B6%EF%BC%8C%E9%A2%91%E7%B9%81%E6%9B%B4%E6%96%B0%E5%A4%B1%E8%B4%A5%EF%BC%8C%E6%88%96%E6%8A%A5%E7%AB%AF%E5%8F%A3443%E8%A2%AB%E6%8B%92%E7%BB%9D%E7%AD%89/">
 
 
 <script class="page-configurations">
@@ -44,12 +45,11 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
-<title>标签 | wbahh
-</title>
+<title>VIM-Plug安装插件时，频繁更新失败，或报端口443被拒绝等 | wbahh</title>
   
 
 
@@ -227,43 +227,119 @@
 </noscript>
 
 
-    <div class="main-inner page posts-expand">
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
   
   
 
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://wbahh.com/2021/04/11/vim-Plug%E5%AE%89%E8%A3%85%E6%8F%92%E4%BB%B6%E6%97%B6%EF%BC%8C%E9%A2%91%E7%B9%81%E6%9B%B4%E6%96%B0%E5%A4%B1%E8%B4%A5%EF%BC%8C%E6%88%96%E6%8A%A5%E7%AB%AF%E5%8F%A3443%E8%A2%AB%E6%8B%92%E7%BB%9D%E7%AD%89/">
 
-    
-    
-    
-    <div class="post-block" lang="zh-CN"><header class="post-header">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="wbahh">
+      <meta itemprop="description" content="欢喜也只得中庸">
+    </span>
 
-<h1 class="post-title" itemprop="name headline">标签
-</h1>
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wbahh">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          VIM-Plug安装插件时，频繁更新失败，或报端口443被拒绝等
+        </h1>
 
-<div class="post-meta-container">
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2021-04-11 23:53:33 / 修改时间：23:58:56" itemprop="dateCreated datePublished" datetime="2021-04-11T23:53:33+08:00">2021-04-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/linux/vim/" itemprop="url" rel="index"><span itemprop="name">vim</span></a>
+        </span>
+    </span>
+
+  
 </div>
 
-</header>
+        </div>
+      </header>
 
-      
-      
-      <div class="post-body"><div class="tag-cloud">
-  <div class="tag-cloud-title">
-    目前共计 12 个标签
-  </div>
-  <div class="tag-cloud-tags">
-    <a href="/tags/C/" style="font-size: 30px;" class="tag-cloud-10">C++</a> <a href="/tags/Cpp/" style="font-size: 12px;" class="tag-cloud-0">Cpp</a> <a href="/tags/Go/" style="font-size: 12px;" class="tag-cloud-0">Go</a> <a href="/tags/Regex/" style="font-size: 12px;" class="tag-cloud-0">Regex</a> <a href="/tags/STL/" style="font-size: 18px;" class="tag-cloud-3">STL</a> <a href="/tags/c/" style="font-size: 24px;" class="tag-cloud-7">c</a> <a href="/tags/hexo/" style="font-size: 12px;" class="tag-cloud-0">hexo</a> <a href="/tags/linux/" style="font-size: 12px;" class="tag-cloud-0">linux</a> <a href="/tags/log4Cpp/" style="font-size: 12px;" class="tag-cloud-0">log4Cpp</a> <a href="/tags/tinyXML2/" style="font-size: 12px;" class="tag-cloud-0">tinyXML2</a> <a href="/tags/vim/" style="font-size: 12px;" class="tag-cloud-0">vim</a> <a href="/tags/vimplus/" style="font-size: 12px;" class="tag-cloud-0">vimplus</a>
-  </div>
-</div>
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>因为中国地区访问像 github 这种国外网站很不稳定, 所以在一般都是采用镜像网站的方式间接访问. 而 vim-plug 下载时都是用的实际网站, 我们可以修改 plug.vim 来将实际网站变为镜像网站, 提高下载成功率.</p>
+<span id="more"></span>
 
-      </div>
-      
-      
-      
+<p>在 plug.vim 中搜索 github, 修改两条语句，即可成功下载GitHub资源。 </p>
+<p>1 将该行</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">let fmt &#x3D; get(g:, &#39;plug_url_format&#39;, &#39;https:&#x2F;&#x2F;git::@github.com&#x2F;%s.git&#39;)</code></pre>
+
+<p> 改为</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">let fmt &#x3D; get(g:, &#39;plug_url_format&#39;, &#39;https:&#x2F;&#x2F;git::@hub.fastgit.org&#x2F;%s.git&#39;)</code></pre>
+
+<p>2 将改行</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">\ &#39;^https:&#x2F;&#x2F;git::@github\.com&#39;, &#39;https:&#x2F;&#x2F;github.com&#39;, &#39;&#39;)</code></pre>
+
+<p>改为</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">\ &#39;^https:&#x2F;&#x2F;git::@hub.fastgit\.org&#39;, &#39;https:&#x2F;&#x2F;hub.fastgit.org&#39;, &#39;&#39;)</code></pre>
+
+<p>上述两个步骤的目是让镜像网站代替实际网站, 这样能有效提高下载成功率。</p>
+<p>！亲测可用！<br>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/htx1020/article/details/114364510">https://blog.csdn.net/htx1020/article/details/114364510</a></p>
+
     </div>
 
     
     
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/vimplus/" rel="tag"><i class="fa fa-tag"></i> vimplus</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/03/23/Net-disk/" rel="prev" title="Net-disk">
+                  <i class="fa fa-chevron-left"></i> Net-disk
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/04/12/tinyXML2%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/" rel="next" title="tinyXML2基本使用方法">
+                  tinyXML2基本使用方法 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
 
 
 
