@@ -23,21 +23,20 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"wbahh.com","root":"/","images":"/images","scheme":"Gemini","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":true,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
   </script>
-<meta name="description" content="函数返回值相关的学习。">
+<meta name="description" content="构造函数相关的隐式类型转换。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C语言中函数返回值解析">
-<meta property="og:url" content="http://wbahh.com/2021/04/18/c%E8%AF%AD%E8%A8%80%E4%B8%AD%E5%87%BD%E6%95%B0%E8%BF%94%E5%9B%9E%E5%80%BC%E8%A7%A3%E6%9E%90/index.html">
+<meta property="og:title" content="C++构造函数隐式类型转换">
+<meta property="og:url" content="http://wbahh.com/2021/05/11/C++%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E9%9A%90%E5%BC%8F%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/index.html">
 <meta property="og:site_name" content="wbahh">
-<meta property="og:description" content="函数返回值相关的学习。">
+<meta property="og:description" content="构造函数相关的隐式类型转换。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-04-18T05:05:05.000Z">
-<meta property="article:modified_time" content="2021-04-25T15:23:11.000Z">
+<meta property="article:published_time" content="2021-05-11T12:19:57.000Z">
+<meta property="article:modified_time" content="2021-05-11T12:49:41.470Z">
 <meta property="article:author" content="wbahh">
-<meta property="article:tag" content="c">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://wbahh.com/2021/04/18/c%E8%AF%AD%E8%A8%80%E4%B8%AD%E5%87%BD%E6%95%B0%E8%BF%94%E5%9B%9E%E5%80%BC%E8%A7%A3%E6%9E%90/">
+<link rel="canonical" href="http://wbahh.com/2021/05/11/C++%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E9%9A%90%E5%BC%8F%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/">
 
 
 <script class="page-configurations">
@@ -49,7 +48,7 @@
     lang   : 'zh-CN'
   };
 </script>
-<title>C语言中函数返回值解析 | wbahh</title>
+<title>C++构造函数隐式类型转换 | wbahh</title>
   
 
 
@@ -238,7 +237,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://wbahh.com/2021/04/18/c%E8%AF%AD%E8%A8%80%E4%B8%AD%E5%87%BD%E6%95%B0%E8%BF%94%E5%9B%9E%E5%80%BC%E8%A7%A3%E6%9E%90/">
+    <link itemprop="mainEntityOfPage" href="http://wbahh.com/2021/05/11/C++%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E9%9A%90%E5%BC%8F%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -251,7 +250,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          C语言中函数返回值解析
+          C++构造函数隐式类型转换
         </h1>
 
         <div class="post-meta-container">
@@ -261,24 +260,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2021-04-18 13:05:05" itemprop="dateCreated datePublished" datetime="2021-04-18T13:05:05+08:00">2021-04-18</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-04-25 23:23:11" itemprop="dateModified" datetime="2021-04-25T23:23:11+08:00">2021-04-25</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/c/" itemprop="url" rel="index"><span itemprop="name">c</span></a>
-        </span>
+      <time title="创建时间：2021-05-11 20:19:57 / 修改时间：20:49:41" itemprop="dateCreated datePublished" datetime="2021-05-11T20:19:57+08:00">2021-05-11</time>
     </span>
 
   
@@ -291,127 +275,54 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>函数返回值相关的学习。</p>
+        <p><code>构造函数相关的隐式类型转换。</code></p>
 <span id="more"></span>
 
-<p> 一般来说，函数在返回返回值的时候汇编代码一般都会将待返回的值放入eax寄存器暂存，接着再调用mov指令将eax中返回值写入对应的变量中，如下代码：做简单的sum运算，</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">#include&lt;stdio.h&gt;   
-#include&lt;stdlib.h&gt;
-
-int sum(int ivar1,int ivar2)
-&#123;
-  return ivar1+ivar2;
+<p>示例函数:</p>
+<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">void printValue(const proxy&amp; value) &#123;
+    cout &lt;&lt; &quot;value&quot; &lt;&lt; value.value() &lt;&lt; endl;
 &#125;
-
-int main()
-&#123;
-  int res&#x3D;sum(1,2);
-&#125;</code></pre>
-
-<p>接着我们来看对应的汇编代码</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">sum:
-     pushl   %ebp
-     movl    %esp, %ebp
-     movl    12(%ebp), %eax
-     movl    8(%ebp), %edx
-     leal    (%edx,%eax), %eax   &#x2F;&#x2F;将函数返回值暂存在eax寄存器中
-     popl    %ebp  &#x2F;&#x2F;main函数栈基地址出栈
-     ret  &#x2F;&#x2F;返回到上调用函数，并调整PC寄存器为main程序下一条指令的地址
-     .size   sum, .-sum
- .globl main
-     .type   main, @function
- main:
-     pushl   %ebp
-     movl    %esp, %ebp
-     subl    $24, %esp
-     movl    $2, 4(%esp)
-     movl    $1, (%esp)
-     call    sum
-     movl    %eax, -4(%ebp)  &#x2F;&#x2F;sum函数返回的返回值通过eax现在赋值给变量res。
-     leave
-     ret
 </code></pre>
+<p>如果我们要调用这个函数应该传一个proxy的对象，但实际上并不一定要是proxy对象。<br>我们先来看看proxy的定义。</p>
+<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">class proxy &#123;
+public:
+    int_proxy(int n) 
+        :_value(n)
+    &#123;&#125;;
 
-<p>函数在调用结束后不会会自动清理栈上的内存，如果我们再次访问原来栈空间上的数据，那么我们读取到的数据还是可以读取到的，例如我上面sum程序的基础上加个sum_1</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"> int* sum_1(int ivar1,int ivar2)
- &#123;
-   int tmp&#x3D; ivar1+ivar2;
-   return &amp;tmp;
-&#125;</code></pre>
-
-<p> 那么在编译的时候，gcc报了一个这样的警告：函数返回了一个局部变量的地址，但是这种情况再运行会程序没什么问题。</p>
-<p>我们运行程序，结果依然是对的。但是我们不推荐这么做，因为栈是一个进程调用函数的动态区域，现在是这样，以后又是怎么样的我们无从知晓。最好就是返回值，函数内部的局部变量的地址尽量少返回。不过有下面三中情况可以返回指针。</p>
-<p>（1）函数中存储了静态局部变量，可以通过返回静态局部变量的地址，来修改静态局部变量的值。如下面函数</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">char *fun_1() &#123;
-    static char name[]&#x3D;&quot;jack&quot;;
-    return name;
-  &#125;</code></pre>
-
-<p>那么局部静态变量是存储在.data段的，不是在堆栈上的，所以函数在返回后，name数组里面的数据jack依旧存在，并且是伴随程序结束消亡的。在这里”jack”这个字符串常量是从.rodata区域复制过来到name这一块内存里面的（言外之意就是说”jack”是存储在.rodata区域）。由于Name数组是在可读可写的.data段里，所以，我们可以对这一段内存的数据进行修改。</p>
-<p> 所以在主程序里面写入</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">char *ptr&#x3D;fun_1();
-    *(ptr+1)&#x3D;&#39;i&#39;;</code></pre>
-
-<p> 是合法的。</p>
-<p> （2）函数返回一个const修饰的常量，也可以通过返回它地址在主函数中访问。原来在于：const修饰的常量存储在.rodata段，跟函数栈上面的数据关系，所以在也可以返回指针。</p>
-<p> 看下面 </p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">char *fun_2() &#123;
-    char *p&#x3D;&quot;alice&quot;;
-    return p;
-&#125;</code></pre>
-
-<p> 主函数还是</p>
-<p> char *ptr=fun_1();</p>
-<p>  *(ptr+1)=’i’;</p>
-<p>编译并没有报错。但是我们允许起来，发现。。</p>
-<p> 崩溃了！原因在于：对于.rodata区域里的”alice“进行修改。看汇编代码。</p>
-<p> 23 .section .rodata</p>
-<p>  24 .LC0:</p>
-<p>  25 .string “alice”</p>
-<p>  26 .text</p>
-<p> 49 call fun_2 </p>
-<p>  50 movl %eax, 28(%esp) </p>
-<p>  51 movl 28(%esp), %eax</p>
-<p>  52 addl $1, %eax</p>
-<p>  53 movb $105, (%eax) //试图将’i’写入“alice“</p>
-<p> 使用gdb调试</p>
-<p> 报出SIGSEGV段访问错误。说明无权限访问。</p>
-<p> 再回到主题看</p>
-<p>（3）函数返回一个指向动态内存分配块的指针。这个是最常见的了。因为我们都知道动态分配内存是malloc函数在堆上分配size个字节的内存，并返回一个(void *)类型的指针，因此我们在返回时需要强转为目标类型。由于动态内存时在堆上进行分配的因此需要程序员手动释放内存，否则会发生内存泄漏！</p>
-<p> 先下面程序题（你会对此印象深刻！）</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">void getMemory(char *p)
-&#123;
-p&#x3D;(char *)malloc(100);
+    int value() const &#123;
+        return _value;     
+        &#125;
+private:
+    int _value;        
 &#125;
-main()
-&#123;
-char *str&#x3D;NULL;
-getMemory(str);
-strcpy(str,NULL);
-printf(&quot;%s&quot;,str);
-&#125;</code></pre>
-
-<p> 会打印什么？猜一猜！</p>
-<p> 哈哈，内存崩溃了！</p>
-<p> 原因在于：getMemory里面的p是保存在栈上的局部变量，是str的一个副本。函数展开后p对应的栈空间存储着已分配内存的地址，现在函数结束了，操作系统收回函数的栈空间，原来的str还是原来的NULL,现在我们将一个“hello”字符串写到0地址里面当然就会发生错误了，因为0地址这个区域是用户不可访问的。我们原意是将hello字符串写入动态分配的内存里，现在写到了0地址内存单元里面，原因在于getMemory没有返回值啊，因此正确的程序应该写成一下</p>
- <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">char * getMemory(char *p)
- &#123;
-   p&#x3D;(char*)malloc(100);
-   assert(p!&#x3D;NULL);
-   return p;
- &#125;
- 
- int main()
- &#123;
-   char *ptr&#x3D;NULL;
-   ptr&#x3D;getMemory(ptr);
-   strcat(ptr,&quot;hello&quot;);
-   printf(&quot;%s\n&quot;,ptr);
-   free(ptr);
- &#125;
 </code></pre>
+<p>:编译器对printValue传的参数应该是一个proxy对象。</p>
+<p>一般我们会这么调：</p>
+<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">printValue(proxy(20));</code></pre>
+<p>但其实下面这种写法也是合法的，没问题：</p>
+<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">printValue(20);</code></pre>
+<p>为什么呢？<br>这就是构造函数的隐式转换。C++编译器认为proxy方法传入的应该是一个const类型<br>的proxy对象，然而如果它发现参数不是该对象时，<br>就会使用该类中可以使用该参数进行构造对象的方法构造出一个临时的对象。<br>我们例子中传入参数 20 是个int型数据，而proxy正好有一个携带int参数的构造函数。</p>
+<p>构造函数隐式类型转换的条件：</p>
+<ul>
+<li>找不到传入参数类型严格对应的类型。</li>
+<li>找到传入参数类型严格匹配的类的构造函数。</li>
+<li>因为隐式转换构造出的是临时对象，所以不可修改，故触发隐式转换的函数的传参类型必须要使用const修饰</li>
+</ul>
+<p>如何禁止隐式类型转换？<br>explict关键字。</p>
+<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">class proxy &#123;
+public:
+    explict int_proxy(int n) 
+        :_value(n)
+    &#123;&#125;;
 
-<p> 印象是不是很深刻啦！因此，在函数中申请的动态内存空间对应的指针一定要返回！并在主程序中释放。</p>
+    int value() const &#123;
+        return _value;     
+        &#125;
+private:
+    int _value;        
+&#125;</code></pre>
+<p>这样就不会出现隐式类型转换了。</p>
 
     </div>
 
@@ -420,21 +331,18 @@ printf(&quot;%s&quot;,str);
     
 
     <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/c/" rel="tag"><i class="fa fa-tag"></i> c</a>
-          </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2021/04/13/%E8%99%9A%E5%87%BD%E6%95%B0%E4%B8%AD%E7%9A%84%E9%BB%98%E8%AE%A4%E5%8F%82%E6%95%B0/" rel="prev" title="虚函数中的默认参数">
-                  <i class="fa fa-chevron-left"></i> 虚函数中的默认参数
+                <a href="/2021/05/10/C++%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%9B%B8%E5%85%B3%E6%96%87%E7%AB%A0/" rel="prev" title="C++设计模式相关文章">
+                  <i class="fa fa-chevron-left"></i> C++设计模式相关文章
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2021/04/22/c%E8%AF%AD%E8%A8%80%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0%E5%AE%8F/" rel="next" title="c语言可变参数宏">
-                  c语言可变参数宏 <i class="fa fa-chevron-right"></i>
+                <a href="/2021/05/11/C++%E7%A6%81%E6%AD%A2%E6%8B%B7%E8%B4%9D%E6%9E%84%E9%80%A0%E5%92%8C%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97%E7%AC%A6%E6%8A%80%E5%B7%A7/" rel="next" title="C++禁止拷贝构造和赋值运算符技巧">
+                  C++禁止拷贝构造和赋值运算符技巧 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
